@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.ArticleMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Article">
+		<!-- WARNING - @mbg.generated -->
+		<id column="art_id" jdbcType="INTEGER" property="artId" />
+		<result column="art_title" jdbcType="VARCHAR" property="artTitle" />
+		<result column="art_date" jdbcType="TIMESTAMP" property="artDate" />
+		<result column="art_cover" jdbcType="VARCHAR" property="artCover" />
+		<result column="art_top" jdbcType="INTEGER" property="artTop" />
+		<result column="art_times" jdbcType="INTEGER" property="artTimes" />
+		<result column="art_enclosure" jdbcType="VARCHAR" property="artEnclosure" />
+		<result column="art_content" jdbcType="LONGVARCHAR" property="artContent" />
+		<association property="user" column="art_user"
+			javaType="cn.fjlcx.application.bean.User" select="cn.fjlcx.application.mapper.UserMapper.selectUserById">
+		</association>
+		<association property="articleType" column="art_type"
+			javaType="cn.fjlcx.application.bean.ArticleType" select="cn.fjlcx.application.mapper.ArticleTypeMapper.selectArticleTypeById">
+		</association>
+	</resultMap>
+
+	<select id="selectArticle" resultMap="BaseResultMap">
+		select * from oa_article order by art_top,art_date DESC
+	</select>
+	
+	<select id="selectArticleByCondition" resultMap="BaseResultMap">
+		select * from oa_article 
+		<if test="stype == 0">
+			where art_title LIKE CONCAT(CONCAT('%',#{skey}),'%')
+		</if>
+		<if test="stype == 1">
+			where art_type = #{skey}
+		</if>
+		order by art_top DESC,art_date DESC
+	</select>
+	
+	<select id="selectArticlebyId" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_article where art_id = #{id}
+	</select>
+</mapper>

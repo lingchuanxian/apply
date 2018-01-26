@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.User">
+		<id column="us_id" jdbcType="INTEGER" property="usId" />
+		<result column="us_loginname" jdbcType="VARCHAR" property="usLoginname" />
+		<result column="us_head" jdbcType="VARCHAR" property="usHead" />
+		<result column="us_name" jdbcType="VARCHAR" property="usName" />
+		<result column="us_pwd" jdbcType="VARCHAR" property="usPwd" />
+		<result column="us_sex" jdbcType="INTEGER" property="usSex" />
+		<result column="us_phone" jdbcType="VARCHAR" property="usPhone" />
+		<result column="us_mail" jdbcType="VARCHAR" property="usMail" />
+		<result column="us_address" jdbcType="VARCHAR" property="usAddress" />
+		<result column="us_state" jdbcType="INTEGER" property="usState" />
+		<result column="us_isdel" jdbcType="INTEGER" property="usIsdel" />
+		<result column="us_registdate" jdbcType="TIMESTAMP" property="usRegistdate" />
+		<result column="us_lastlogindate" jdbcType="TIMESTAMP"
+			property="usLastlogindate" />
+		<association property="organization" column="us_orgid"
+			javaType="cn.fjlcx.application.bean.Organization" select="cn.fjlcx.application.mapper.OrganizationMapper.selectOrganizationById">
+		</association>
+		<association property="department" column="us_depid"
+			javaType="cn.fjlcx.application.bean.Department" select="cn.fjlcx.application.mapper.DepartmentMapper.selectDepById">
+		</association>
+	</resultMap>
+	
+	<!-- 排除已经删除的用户 -->
+	<sql id="expectisdel">
+        and us_isdel != 1
+    </sql>
+
+	<select id="selectUserWithRole" parameterType="String"
+		resultMap="BaseResultMap">
+		select * from oa_user WHERE us_loginname = #{username} 
+		<include refid="expectisdel"></include>
+	</select>
+
+	<select id="selectUserByConditions" resultMap="BaseResultMap">
+		select
+		us_id,us_loginname,us_name,us_state,us_orgid,us_depid
+		from
+		oa_user
+		where us_id != 23
+		<if test="name != null and name !=''">
+			and us_name LIKE CONCAT(CONCAT('%',#{name}),'%')
+		</if>
+		<if test="loginName != null and loginName !=''">
+			and us_loginname LIKE CONCAT(CONCAT('%',#{loginName}),'%')
+		</if>
+         <include refid="expectisdel"></include>
+		
+	</select>
+
+	<select id="selectUserById" parameterType="int" resultMap="BaseResultMap">
+		SELECT * from oa_user where us_id = #{id}  
+		<include refid="expectisdel"></include>
+	</select>
+	
+	<update id="falseDeletion" parameterType="int">
+		update oa_user set us_isdel = 1 where us_id = #{id}  
+	</update>
+</mapper>

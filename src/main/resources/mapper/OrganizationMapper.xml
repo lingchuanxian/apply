@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.OrganizationMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Organization">
+		<id column="org_id" jdbcType="INTEGER" property="orgId" />
+		<result column="org_name" jdbcType="VARCHAR" property="orgName" />
+		<result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+		<result column="org_pid" jdbcType="INTEGER" property="orgPid" />
+		<result column="org_detail" jdbcType="LONGVARCHAR" property="orgDetail" />
+		<result column="org_order" jdbcType="INTEGER" property="orgOrder" />
+	</resultMap>
+
+	<!-- 排除已经删除的机构 -->
+	<sql id="expectisdel">
+        and org_isdel != 1
+    </sql>
+
+	<select id="selectOrganizationOfAll" resultMap="BaseResultMap">
+		select * from oa_organization 
+		<where>
+			<include refid="expectisdel"></include>
+		</where>
+		order by org_order
+	</select>
+
+	<select id="selectMaxOrder" resultType="int">
+		select max(org_order) from oa_organization
+	</select>
+
+	<select id="selectOrganizationById" parameterType="int"
+		resultMap="BaseResultMap">
+		select * from oa_organization where org_id = #{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<update id="updateOrganizationOrder" parameterType="int">
+		update oa_organization set org_order = #{order} where org_id = #{id}
+		<include refid="expectisdel"></include>
+	</update>
+	
+	<update id="falseDeletion" parameterType="int">
+		update oa_organization set org_isdel = 1 where org_id = #{id}  
+	</update>
+</mapper>

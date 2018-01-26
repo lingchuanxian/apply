@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.MenuMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Menu">
+		<!-- WARNING - @mbg.generated -->
+		<id column="mu_id" jdbcType="INTEGER" property="muId" />
+		<result column="mu_text" jdbcType="VARCHAR" property="muText" />
+		<result column="mu_code" jdbcType="VARCHAR" property="muCode" />
+		<result column="mu_state" jdbcType="VARCHAR" property="muState" />
+		<result column="mu_iconCls" jdbcType="VARCHAR" property="muIconcls" />
+		<result column="mu_url" jdbcType="VARCHAR" property="muUrl" />
+		<result column="mu_pid" jdbcType="INTEGER" property="muPid" />
+		<result column="mu_checked" jdbcType="BOOLEAN" property="muChecked" />
+		<result column="mu_order" jdbcType="INTEGER" property="muOrder" />
+		<result column="mu_type" jdbcType="INTEGER" property="muType" />
+		<result column="mu_request_url" jdbcType="VARCHAR" property="muRequestUrl" />
+	</resultMap>
+	
+	<sql id="expectisdel">
+        and mu_isdel != 1
+    </sql>
+    
+    <update id="falseDeletion" parameterType="int">
+		update oa_menu set mu_isdel = 1 where mu_id = #{id}  
+	</update>
+
+	<select id="selectAllOfMenu" resultMap="BaseResultMap">
+		select * from oa_menu
+		<where>
+			<include refid="expectisdel"></include>
+		</where>
+		 order by mu_order asc
+	</select>
+
+	<delete id="deleteMenuById" parameterType="int">
+		delete from oa_menu where mu_id = #{id}
+	</delete>
+
+	<select id="selectMenuById" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_menu where mu_id = #{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<select id="selectMenuByPid" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_menu where mu_pid = #{pid} 
+		<include refid="expectisdel"></include>
+		order by mu_order asc
+	</select>
+
+	<update id="updateMenuOrder" parameterType="int">
+		update oa_menu set mu_order = #{order} where mu_id = #{id}
+		<include refid="expectisdel"></include>
+	</update>
+	<select id="selectMaxOrder" resultType="int">
+		select max(mu_order) from oa_menu
+	</select>
+	<select id="selectMaxId" resultType="int">
+		select max(mu_id) from oa_menu
+	</select>
+</mapper>

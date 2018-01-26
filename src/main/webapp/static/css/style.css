@@ -1,0 +1,198 @@
+body {
+	font: 16px/1.6em Microsoft YaHei;
+}
+
+a, a:link {
+	color: #000;
+	text-decoration: none;
+	outline: none;
+}
+
+a:hover, a:focus {
+	text-decoration: none;
+	color: #39f;
+}
+
+select, button, input[type="button"], input[type="reset"], input[type="submit"],
+	input[type="radio"], input[type="checkbox"] {
+	cursor: pointer;
+}
+
+.footer {
+	height: 30px;
+	line-height:30px;
+	text-align: center;
+	overflow: hidden;
+	background: #e0ecff;
+	font-size: 12px;
+}
+
+.header {
+	height: 50px;
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+	background: url(../images/bg_header.jpg) bottom repeat-x;
+}
+
+.header-left {
+	height: 50px;
+	line-height: 50px;
+	float: left;
+}
+
+.header-left img {
+	height: 50px;
+	margin-left: 30px;
+}
+
+.nav-tab {
+	display: block;
+	text-decoration: none;
+	color: #000000;
+	padding-left: 5px;
+}
+
+.head-menu {
+	float: right;
+}
+
+.head-menu li {
+	float: left;
+	list-style: none;
+	margin-right: 5px;
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.head-menu li a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.head-menu li a:hover {
+	text-decoration: underline;
+}
+
+.header-right {
+	height: 50px;
+	color: #fff;
+	float: right;
+	padding-right: 20px;
+	font-size: 14px;
+}
+
+.user-menu li {
+	float: left;
+	list-style-type: none;
+}
+
+.user-menu li a {
+	color: #fff;
+}
+
+.tree-node {
+	padding: 2px 0px;
+}
+
+.tree-node-selected {
+	padding: 2px 0;
+	border: 1px #e8edf3 solid;
+}
+
+#login {
+	margin: 0 auto;
+	padding: 15px 0 0 0;
+}
+
+#login p {
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+}
+
+.textboxp {
+	padding: 4px 6px;
+}
+
+#btn {
+	text-align: center;
+}
+
+#btn a {
+	padding: 0 5px;
+}
+
+.textboxr {
+	border-radius: 6px;
+}
+
+#dtm form, #dfm form, #dm-edt form {
+	margin: 0 40px;
+}
+
+#dtm form .easyui-combobox, #dfm form .easyui-combobox, #dm-edt form .easyui-combobox
+	{
+	width: 180px;
+}
+
+.box {
+	text-align: center;
+}
+
+.rb-add-user {
+	margin: 15px auto;
+	width: 750px;
+	border-right: 1px solid #c3c3c3;
+	border-bottom: 1px solid #c3c3c3;
+}
+
+.rb-tb2 {
+	margin: 15px auto;
+	width: 350px;
+	border-right: 1px solid #c3c3c3;
+	border-bottom: 1px solid #c3c3c3;
+}
+
+.rb-add-user td ,.rb-tb2 td {
+	height: 40px;
+	border-left: 1px solid #c3c3c3;
+	border-top: 1px solid #c3c3c3;
+}
+
+.rb-add-user .td_val,.rb-tb2 .td_key {
+	background: #E0ECFF;
+}
+
+.rb-add-user .td_val,.rb-tb2 .td_val {
+	background: #F4F4F4;
+}
+
+.rb-org {
+	margin: 15px auto;
+	width: 350px;
+	border-right: 1px solid #c3c3c3;
+	border-bottom: 1px solid #c3c3c3;
+}
+
+.rb-org td {
+	height: 40px;
+	border-left: 1px solid #c3c3c3;
+	border-top: 1px solid #c3c3c3;
+}
+
+.rb-org td input, .rb-add-user td input {
+	width: 200px;
+	padding: 5px 0;
+}
+
+.rb-org .td_key {
+	background: #E0ECFF;
+}
+
+.rb-org .td_val {
+	background: #F4F4F4;
+}
+.top{
+	vertical-align: center;
+}

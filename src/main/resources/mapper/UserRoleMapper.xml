@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.UserRole">
+		<id column="ur_id" jdbcType="INTEGER" property="urId" />
+		<result column="ur_uid" jdbcType="INTEGER" property="urUid" />
+		<association property="urUser" column="ur_uid"
+			javaType="cn.fjlcx.application.bean.User" select="cn.fjlcx.application.mapper.UserMapper.selectUserById">
+		</association>
+		<association property="urRole" column="ur_rid"
+			javaType="cn.fjlcx.application.bean.Role" select="cn.fjlcx.application.mapper.RoleMapper.selectRoleById">
+		</association>
+	</resultMap>
+	
+	<sql id="expectisdel">
+        and ur_isdel != 1
+    </sql>
+
+	<select id="selectUserRoleByUserId" parameterType="int"
+		resultMap="BaseResultMap">
+		select * from oa_user_role where ur_uid=#{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<select id="selectUserRoleByRoleId" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_user_role where ur_rid=#{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<delete id="deleteUserRoleByRoleId" parameterType="int">
+		update oa_user_role set ur_isdel = 1 where ur_rid = #{id}
+	</delete>
+	
+	<update id="falseDeletion" parameterType="int">
+		update oa_user_role set ur_isdel = 1 where ur_id = #{id}  
+	</update>
+
+</mapper>

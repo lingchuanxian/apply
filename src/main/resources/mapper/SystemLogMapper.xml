@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.SystemLogMapper">
+  <resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.SystemLog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="lg_id" jdbcType="INTEGER" property="lgId" />
+    <result column="lg_method" jdbcType="VARCHAR" property="lgMethod" />
+    <result column="lg_type" jdbcType="VARCHAR" property="lgType" />
+    <result column="lg_request_ip" jdbcType="VARCHAR" property="lgRequestIp" />
+    <result column="lg_exception_code" jdbcType="VARCHAR" property="lgExceptionCode" />
+    <result column="lg_params" jdbcType="VARCHAR" property="lgParams" />
+    <result column="lg_create_date" jdbcType="TIMESTAMP" property="lgCreateDate" />
+    <result column="lg_description" jdbcType="LONGVARCHAR" property="lgDescription" />
+    <result column="lg_exception_detail" jdbcType="LONGVARCHAR" property="lgExceptionDetail" />
+    <association property="user" column="lg_create_user"
+			javaType="cn.fjlcx.application.bean.User" select="cn.fjlcx.application.mapper.UserMapper.selectUserById">
+		</association>
+  </resultMap>
+  
+  <select id="selectSystemLogByCondition" resultMap="BaseResultMap">
+  	select * from oa_system_log 
+  	<if test="stype == 0">
+  		where lg_description LIKE CONCAT(CONCAT('%',#{skey}),'%')
+  	</if>
+  	<if test="stype == 1">
+  		where lg_method LIKE CONCAT(CONCAT('%',#{skey}),'%')
+  	</if>
+  	<if test="stype == 2">
+  		where lg_create_date  &gt;= #{skey1} and lg_create_date &lt;= #{skey2} 
+  	</if>
+  	order  by lg_create_date DESC
+  </select>
+  
+  <select id="selectSystemLogById" parameterType="int" resultMap="BaseResultMap">
+  	select * from oa_system_log where lg_id = #{id}
+  </select>
+</mapper>

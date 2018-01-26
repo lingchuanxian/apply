@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.DepartmentMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Department">
+		<id column="dep_id" jdbcType="INTEGER" property="depId" />
+		<result column="dep_name" jdbcType="VARCHAR" property="depName" />
+		<result column="dep_pid" jdbcType="INTEGER" property="depPid" />
+		<result column="dep_order" jdbcType="INTEGER" property="depOrder" />
+		<result column="dep_detail" jdbcType="LONGVARCHAR" property="depDetail" />
+		<association property="organization" column="dep_orgid"
+			javaType="cn.fjlcx.application.bean.Organization" select="cn.fjlcx.application.mapper.OrganizationMapper.selectOrganizationById">
+		</association>
+	</resultMap>
+	
+	<!-- 排除已经删除的部门 -->
+	<sql id="expectisdel">
+        and dep_isdel != 1
+    </sql>
+
+	<select id="selectDepByOrgId" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_department where dep_orgid = #{id} 
+		<include refid="expectisdel"></include>
+		order by dep_order
+	</select>
+
+	<select id="selectDepById" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_department where dep_id = #{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<select id="selectMaxOrder" resultType="int">
+		select max(dep_order) from oa_department
+	</select>
+	
+	<update id="falseDeletion" parameterType="int">
+		update oa_department set dep_isdel = 1 where dep_id = #{id}  
+	</update>
+
+</mapper>

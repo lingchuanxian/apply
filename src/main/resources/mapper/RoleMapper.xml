@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Role">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="rl_id" jdbcType="INTEGER" property="rlId" />
+    <result column="rl_code" jdbcType="VARCHAR" property="rlCode" />
+    <result column="rl_name" jdbcType="VARCHAR" property="rlName" />
+    <result column="rl_detail" jdbcType="VARCHAR" property="rlDetail" />
+    <result column="rl_order" jdbcType="INTEGER" property="rlOrder" />
+  </resultMap>
+  
+  <sql id="expectisdel">
+        and rl_isdel != 1
+    </sql>
+  
+  <select id="selectAllOfRole" resultMap="BaseResultMap">
+  	select * from oa_role where rl_id != '1' <include refid="expectisdel"></include> order by rl_order 
+  </select>
+  
+  <select id="selectMaxOrder" resultType="int">
+  	select max(rl_order) from oa_role
+  </select>
+  
+  <select id="selectRoleById" parameterType="int" resultMap="BaseResultMap">
+  	select * from oa_role where rl_id = #{id} <include refid="expectisdel"></include>
+  </select>
+  
+  <update id="falseDeletion" parameterType="int">
+		update oa_role set rl_isdel = 1 where rl_id = #{id}  
+	</update>
+</mapper>

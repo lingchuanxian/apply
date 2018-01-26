@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.RoleMenuMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.RoleMenu">
+		<id column="rm_id" jdbcType="INTEGER" property="rmId" />
+		<association property="role" column="rm_rid"
+			javaType="cn.fjlcx.application.bean.Role" select="cn.fjlcx.application.mapper.RoleMapper.selectRoleById">
+		</association>
+		<association property="menu" column="rm_mid"
+			javaType="cn.fjlcx.application.bean.Menu" select="cn.fjlcx.application.mapper.MenuMapper.selectMenuById">
+		</association>
+	</resultMap>
+
+	<sql id="expectisdel">
+        and rm_isdel != 1
+    </sql>
+
+	<select id="selectMenuByRole" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_role_menu where rm_rid = #{id}
+		<include refid="expectisdel"></include>
+	</select>
+
+	<delete id="deleteRoleMenuByRole" parameterType="int">
+		update oa_role_menu set rm_isdel = 1 where rm_rid = #{id}
+	</delete>
+
+	<delete id="deleteRoleMenuByMenu" parameterType="int">
+		update oa_role_menu set rm_isdel = 1 where rm_mid = #{id}
+	</delete>
+
+	<select id="selectRoleMenuAll" resultMap="BaseResultMap">
+		select * from oa_role_menu 
+		<where>
+			<include refid="expectisdel"></include>
+		</where>
+	</select>
+	
+	<select id="selectRoleMenuByMenu" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_role_menu where rm_mid = #{id} <include refid="expectisdel"></include>
+	</select>
+	
+	 <update id="falseDeletion" parameterType="int">
+		update oa_role_menu set rm_isdel = 1 where rm_id = #{id}  
+	</update>
+	
+</mapper>
