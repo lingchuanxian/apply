@@ -11,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,9 +56,9 @@ public class ArticleController extends BaseController{
      * @return
      */
     @RequiresPermissions("system:article:select")
-	@GetMapping("selectArticleOfAll")
+	@GetMapping("select")
 	@ResponseBody
-    public Result selectArticleOfAll(int page,int rows,String stype,String skey) {
+    public Result select(int page,int rows,String stype,String skey) {
     	logger.debug("stype:"+stype+"---skey:"+skey);
     	PageHelper.startPage(page, rows);//设置分页
     	Map<String,Object> params1 = new HashMap<String, Object>();
@@ -77,9 +78,9 @@ public class ArticleController extends BaseController{
 	 * @return
 	 */
     @RequiresPermissions("system:article:select")
-	@PostMapping("SelectArticleById")
+	@PostMapping("select/{id}")
     @ResponseBody
-	public Result SelectArticleById(@RequestParam int id) {
+	public Result selectArticleById(@PathVariable int id) {
 		Article article = articleService.selectArticlebyId(id);
 		return ResultGenerator.genSuccessResult(article);
 	}
@@ -90,10 +91,10 @@ public class ArticleController extends BaseController{
 	 * @return
 	 */
     @RequiresPermissions("system:article:delete")
-    @PostMapping("DeleteArticleById")
+    @PostMapping("delete")
     @SystemControllerLog(description = "根据ids删除文章")   
     @ResponseBody
-	public Result DeleteArticleById(@RequestParam String ids) {
+	public Result delete(@RequestParam String ids) {
     	String[] idString = ids.split(",");
     	for(int i = 0;i < idString.length;i++ ) {
     		articleService.deleteById(Integer.parseInt(idString[i]));
@@ -107,10 +108,10 @@ public class ArticleController extends BaseController{
      * @return
      */
     @RequiresPermissions("system:article:insert")
-    @PostMapping("AddArticle")
+    @PostMapping("insert")
     @SystemControllerLog(description = "新增文章")  
     @ResponseBody
-	public Result AddArticle(@ModelAttribute Article article) {
+	public Result insert(@ModelAttribute Article article) {
     	logger.info("article:"+article.toString());
     	article.setArtDate(new Date());
     	article.setArtTimes(0);
@@ -120,10 +121,10 @@ public class ArticleController extends BaseController{
 	}
     
     @RequiresPermissions("system:article:update")
-    @PostMapping("UpdateArticle")
+    @PostMapping("update")
     @SystemControllerLog(description = "更新文章")  
     @ResponseBody
-    public Result UpdateArticle(@ModelAttribute Article article) {
+    public Result update(@ModelAttribute Article article) {
     	logger.info("article:"+article.toString());
     	articleService.update(article);
     	return ResultGenerator.genSuccessResult().setMessage("更新成功");

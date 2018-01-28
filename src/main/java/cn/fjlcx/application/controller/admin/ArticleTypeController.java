@@ -31,57 +31,67 @@ import cn.fjlcx.application.service.ArticleTypeService;
 @Controller
 @RequestMapping("admin/articleType")
 public class ArticleTypeController {
-	
-    @Resource
-    private ArticleTypeService articleTypeService;
-    
-    @RequiresPermissions("system:article:type:list")
-    @GetMapping("list")
+
+	@Resource
+	private ArticleTypeService articleTypeService;
+
+	@RequiresPermissions("system:article:type:list")
+	@GetMapping("list")
 	public String articletypeList() {
 		return "admin/article/type/list";
 	}
-    
-    /**
-     * 查询文章类别
-     * @return
-     */
-    @RequiresPermissions("system:article:type:select")
-    @GetMapping("selectArticleTypeOfAll")
-    @ResponseBody
-    public Result GetMenuById() {
+
+	/**
+	 * 查询文章类别
+	 * @return
+	 */
+	@RequiresPermissions("system:article:type:select")
+	@GetMapping("select")
+	@ResponseBody
+	public Result select() {
 		List<ArticleType> artList = articleTypeService.findAll();
 		return ResultGenerator.genSuccessResult(artList);
 	}
-    
-    /**
-     * 新增或更新文章分类
-     * @param type
-     * @return
-     */
-    @RequiresPermissions(value={"system:article:type:insert","system:article:type:update"},logical=Logical.OR)
-    @PostMapping("AddOrUpdateArticleType")
-    @SystemControllerLog(description = "新增或更新文章分类")   
-    @ResponseBody
-    public Result AddOrUpdateArticleType(@ModelAttribute ArticleType type) {
-		if(type.getAtId() == null) {
-			articleTypeService.save(type);
-		}else {
-			articleTypeService.update(type);
-		}
-		return ResultGenerator.genSuccessResult().setMessage("成功");
+
+	/**
+	 * 新增文章分类
+	 * @param type
+	 * @return
+	 */
+	@RequiresPermissions("system:article:type:insert")
+	@PostMapping("insert")
+	@SystemControllerLog(description = "新增文章分类")   
+	@ResponseBody
+	public Result insert(@ModelAttribute ArticleType type) {
+		articleTypeService.save(type);
+		return ResultGenerator.genSuccessResult().setMessage("新增成功");
 	}
-    
-    /**
-     * 根据id删除指定文章分类
-     * @param id
-     * @return
-     */
-    @RequiresPermissions("system:article:type:delete")
-    @PostMapping("DeleteArtTypeById")
-    @SystemControllerLog(description = "根据id删除指定文章分类")  
-    @ResponseBody
-	public Result DeleteArtTypeById(@RequestParam int id) {
-    	articleTypeService.deleteById(id);
+
+	/**
+	 * 更新文章分类
+	 * @param type
+	 * @return
+	 */
+	@RequiresPermissions("system:article:type:update")
+	@PostMapping("update")
+	@SystemControllerLog(description = "更新文章分类")   
+	@ResponseBody
+	public Result update(@ModelAttribute ArticleType type) {
+		articleTypeService.update(type);
+		return ResultGenerator.genSuccessResult().setMessage("更新成功");
+	}
+
+	/**
+	 * 根据id删除指定文章分类
+	 * @param id
+	 * @return
+	 */
+	@RequiresPermissions("system:article:type:delete")
+	@PostMapping("delete")
+	@SystemControllerLog(description = "根据id删除指定文章分类")  
+	@ResponseBody
+	public Result delete(@RequestParam int id) {
+		articleTypeService.deleteById(id);
 		return ResultGenerator.genSuccessResult().setMessage("删除成功");
 	}
 

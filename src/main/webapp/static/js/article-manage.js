@@ -9,7 +9,7 @@ $(function(){
 	datagrid = $("#article-tb").datagrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/article/selectArticleOfAll",
+		url:"admin/article/select",
 		idField:'artId',
 		rownumbers: true,
 		checkOnSelect : true,  
@@ -146,7 +146,7 @@ $(function(){
 
 	function formAddSubmit(){
 		$('#article-form').form('submit', {
-			url:'admin/article/AddArticle',
+			url:'admin/article/insert',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -227,7 +227,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/article/DeleteArticleById",
+					url: "admin/article/delete",
 					type: "post",
 					dataType: "json",
 					data:{"ids": ids},
@@ -282,10 +282,9 @@ $(function(){
 			return;
 		}else{
 			$.ajax({
-				url: "admin/article/SelectArticleById",
+				url: "admin/article/select/"+selectRows[0].artId,
 				type: "post",
 				dataType: "json",
-				data:{"id": selectRows[0].artId},
 				success: function (data) {
 					console.log(data);
 					if(data.code == 200){

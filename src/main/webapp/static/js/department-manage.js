@@ -21,9 +21,10 @@ $(function(){
 		}
 	});
 	
+	var datagrid; //定义全局变量datagrid
+	var editRow = undefined; //定义全局变量：当前编辑的行
+	
 	function loadMenu(nodeId,text){
-		var datagrid; //定义全局变量datagrid
-		var editRow = undefined; //定义全局变量：当前编辑的行
 		datagrid = $("#DepManage").datagrid({
 			title:text,
 			method:"POST",
@@ -63,91 +64,7 @@ $(function(){
 					type: 'validatebox',
 				}
 			}]],
-			toolbar:[{
-				text:'新增',
-				iconCls:'icon-image-add',
-				handler:function(){
-					//添加时先判断是否有开启编辑的行，如果有则把开户编辑的那行结束编辑
-					if (editRow != undefined) {
-						datagrid.datagrid("endEdit", editRow);
-					}
-					//添加时如果没有正在编辑的行，则在datagrid的最后追加
-					if (editRow == undefined) {
-						var index = datagrid.datagrid("appendRow", {
-							depName: '',
-							depDetail: '',
-						}).datagrid('getRows').length-1;;
-						//将新插入的那一行开户编辑状态
-						datagrid.datagrid("beginEdit", index);
-						datagrid.datagrid("checkRow",index);
-						//给当前编辑的行赋值
-						editRow = index;
-					}
-				}
-			},'-',{
-				text:'编辑',
-				iconCls:'icon-layout-edit',
-				handler:function(){
-					//修改时要获取选择到的行
-					var rows = datagrid.datagrid("getSelections");
-					//如果只选择了一行则可以进行修改，否则不操作
-					if (rows.length == 1) {
-						//修改之前先关闭已经开启的编辑行，当调用endEdit该方法时会触发onAfterEdit事件
-						if (editRow != undefined) {
-							datagrid.datagrid("endEdit", editRow);
-						}
-						//当无编辑行时
-						if (editRow == undefined) {
-							//获取到当前选择行的下标
-							var index = datagrid.datagrid("getRowIndex", rows[0]);
-							//开启编辑
-							datagrid.datagrid("beginEdit", index);
-							//把当前开启编辑的行赋值给全局变量editRow
-							editRow = index;
-							//当开启了当前选择行的编辑状态之后，
-							//应该取消当前列表的所有选择行，要不然双击之后无法再选择其他行进行编辑
-							//datagrid.datagrid("unselectAll");
-						}
-					}else{
-						$.messager.alert("编辑提示", "请选择要进行编辑的行");
-					}
-				}
-			},
-			{ id : 'save', text: '保存', iconCls: 'icon-disk', handler: function () {
-				//保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
-				datagrid.datagrid("endEdit", editRow);
-				editRow = undefined;
-			}
-			},
-			{ id : 'cancle', text: '取消编辑', iconCls: 'icon-undo', handler: function () {
-				datagrid.datagrid('cancelEdit',editRow)
-				editRow = undefined;
-				datagrid.datagrid("unselectAll");
-				//添加时取消新增的一行还在，暂时用刷新页面的方法
-				datagrid.datagrid("reload");
-				$("#save").hide();
-				$("#cancle").hide();
-			}
-			},'-',{
-				text:'删除',
-				iconCls:'icon-layout-delete',
-				handler:function(){
-					doDelete(datagrid);
-				}
-			},{
-				text:'上移',
-				iconCls:'icon-arrow-up',
-				handler:function(){
-					MoveUp(datagrid);
-				}
-			},
-			{
-				text:'下移',
-				iconCls:'icon-arrow-down',
-				handler:function(){
-					MoveDown(datagrid);
-				}
-			}],
+			toolbar:'#toolbar',
 			onBeforeLoad:function(){
 				$("#save").hide();
 				$("#cancle").hide();
@@ -196,8 +113,82 @@ $(function(){
 		});
 	}
 
+	$("#add").click(function(){
+		//添加时先判断是否有开启编辑的行，如果有则把开户编辑的那行结束编辑
+		if (editRow != undefined) {
+			datagrid.datagrid("endEdit", editRow);
+		}
+		//添加时如果没有正在编辑的行，则在datagrid的最后追加
+		if (editRow == undefined) {
+			var index = datagrid.datagrid("appendRow", {
+				depName: '',
+				depDetail: '',
+			}).datagrid('getRows').length-1;;
+			//将新插入的那一行开户编辑状态
+			datagrid.datagrid("beginEdit", index);
+			datagrid.datagrid("checkRow",index);
+			//给当前编辑的行赋值
+			editRow = index;
+		}
+	});
+	
+	
+	$("#edit").click(function(){
+		//修改时要获取选择到的行
+		var rows = datagrid.datagrid("getSelections");
+		//如果只选择了一行则可以进行修改，否则不操作
+		if (rows.length == 1) {
+			//修改之前先关闭已经开启的编辑行，当调用endEdit该方法时会触发onAfterEdit事件
+			if (editRow != undefined) {
+				datagrid.datagrid("endEdit", editRow);
+			}
+			//当无编辑行时
+			if (editRow == undefined) {
+				//获取到当前选择行的下标
+				var index = datagrid.datagrid("getRowIndex", rows[0]);
+				//开启编辑
+				datagrid.datagrid("beginEdit", index);
+				//把当前开启编辑的行赋值给全局变量editRow
+				editRow = index;
+				//当开启了当前选择行的编辑状态之后，
+				//应该取消当前列表的所有选择行，要不然双击之后无法再选择其他行进行编辑
+				//datagrid.datagrid("unselectAll");
+			}
+		}else{
+			$.messager.alert("编辑提示", "请选择要进行编辑的行");
+		}
+	});
+	
+	$("#save").click(function(){
+		//保存时结束当前编辑的行，自动触发onAfterEdit事件如果要与后台交互可将数据通过Ajax提交后台
+		datagrid.datagrid("endEdit", editRow);
+		editRow = undefined;
+	});
+	
+	$("#cancle").click(function(){
+		datagrid.datagrid('cancelEdit',editRow)
+		editRow = undefined;
+		datagrid.datagrid("unselectAll");
+		//添加时取消新增的一行还在，暂时用刷新页面的方法
+		datagrid.datagrid("reload");
+		$("#save").hide();
+		$("#cancle").hide();
+	});
+	
+	$("#delete").click(function(){
+		doDelete();
+	});
+	
+	$("#up").click(function(){
+		MoveUp();
+	});
+	
+	$("#down").click(function(){
+		MoveDown();
+	});
+	
 	//上移
-	function MoveUp(datagrid) {
+	function MoveUp() {
 		var row = datagrid.datagrid("getSelected");
 		if (row != null) {
 			var index =datagrid.datagrid('getRowIndex', row);
@@ -207,7 +198,7 @@ $(function(){
 		}
 	}
 	//下移
-	function MoveDown(datagrid) {
+	function MoveDown() {
 		var row = datagrid.datagrid("getSelected");
 		if (row != null) {
 			var index = datagrid.datagrid('getRowIndex', row);
@@ -217,7 +208,6 @@ $(function(){
 		}
 
 	}
-
 
 	function mysort(index, type, datagrid) {
 		if ("up" == type) {
@@ -267,7 +257,7 @@ $(function(){
 
 
 	//删除数据
-	function doDelete(datagrid) {
+	function doDelete() {
 		var selectRows =datagrid.treegrid("getSelections");
 		if (selectRows.length < 1) {
 			$.messager.alert("提示消息", "请选择要删除的菜单!");
