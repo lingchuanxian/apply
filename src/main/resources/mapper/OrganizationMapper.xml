@@ -8,6 +8,9 @@
 		<result column="org_pid" jdbcType="INTEGER" property="orgPid" />
 		<result column="org_detail" jdbcType="LONGVARCHAR" property="orgDetail" />
 		<result column="org_order" jdbcType="INTEGER" property="orgOrder" />
+		<association property="parent" column="org_pid"
+			javaType="cn.fjlcx.application.bean.Organization" select="selectOrganizationById">
+		</association>
 	</resultMap>
 
 	<!-- 排除已经删除的机构 -->

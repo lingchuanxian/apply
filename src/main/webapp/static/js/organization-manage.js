@@ -8,7 +8,7 @@ $(function(){
 	treegrid = $("#organization-tb").treegrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/organization/selectOrganizationOfAll",
+		url:"admin/organization/select",
 		idField:'orgId',
 		treeField:'orgName',
 		rownumbers: true,
@@ -40,21 +40,7 @@ $(function(){
 			width:200
 		}
 		]],
-		toolbar:[{
-			text:'新增',
-			iconCls:'icon-image-add',
-			handler:function(){
-				loadCombotree();
-				$('#organization-box').dialog("open");
-				$("#organization-form").form("disableValidation");
-			}
-		},{
-			text:'删除',
-			iconCls:'icon-layout-delete',
-			handler:function(){
-				doDelete();
-			}
-		}],
+		toolbar:'#toolbar',
 		onBeforeLoad:function(){
 		},
 		onLoadSuccess: function(row){
@@ -62,6 +48,14 @@ $(function(){
 		}
 	});
 
+	//################################	新增开始	##################################
+	
+	$("#add").click(function(){
+		loadCombotree($("#org-combox"),null);
+		$('#organization-box').dialog("open");
+		$("#organization-form").form("disableValidation");
+	});
+	
 	$('#organization-box').dialog({
 		title: '机构新增',
 		width: 400,
@@ -83,10 +77,98 @@ $(function(){
 			}
 		}]
 	});
+	
 
+	function formAddSubmit(){
+		$('#organization-form').form('submit', {
+			url:'admin/organization/insert',
+			onSubmit: function(){
+				return $(this).form('enableValidation').form('validate');
+			},
+			success:function(data){
+				$('#organization-box').dialog("close");
+				$('#organization-form').form("clear");
+				treegrid.treegrid("reload");
+			}
+		});
+	}
+	//################################	新增结束	##################################
 
-	function loadCombotree(){
-		$("#org-combox").combotree({  
+	//################################	编辑开始	##################################
+	
+	$("#edit").click(function(){
+		var selectRows =treegrid.treegrid("getSelections");
+		if (selectRows.length < 1) {
+			$.messager.alert("提示消息", "请选择要编辑的机构!");
+			return;
+		}
+		MaskUtil.mask();
+		
+		$.ajax({
+			url: "admin/organization/select/"+selectRows[0].orgId,
+			type: "post",
+			dataType: "json",
+			success: function (data) {
+				MaskUtil.unmask();
+				if(data.code == 200){
+					var org = data.data;
+					console.log(org);
+					$("#orgId").val(org.orgId);
+					$("#edit-orgName").textbox('setValue',org.orgName);
+					$("#edit-orgCode").textbox('setValue',org.orgCode);
+					$("#edit-orgDetail").textbox('setValue',org.orgDetail);
+					loadCombotree($("#org-combox2"),org.parent);
+					$('#organization-edit-box').dialog("open");
+					$("#organization-edit-form").form("disableValidation");
+				}else{
+					HandleException(data);
+				}
+			}
+		});
+		
+		
+	});
+	
+	$('#organization-edit-box').dialog({
+		title: '机构编辑',
+		width: 400,
+		height: 400,
+		closed: true,
+		cache: false,
+		modal: true,
+		buttons:[{
+			text:'保存',
+			iconCls:'icon-ok',
+			handler:function(){
+				formEditSubmit();
+			}
+		},{
+			text:'取消',
+			iconCls:'icon-cancel',
+			handler:function(){
+				$('#organization-edit-box').dialog("close");
+			}
+		}]
+	});
+	
+	function formEditSubmit(){
+		$('#organization-edit-form').form('submit', {
+			url:'admin/organization/update',
+			onSubmit: function(){
+				return $(this).form('enableValidation').form('validate');
+			},
+			success:function(data){
+				$('#organization-edit-box').dialog("close");
+				$('#organization-edit-form').form("clear");
+				treegrid.treegrid("reload");
+			}
+		});
+	}
+	
+	//################################	编辑结束	##################################
+
+	function loadCombotree(combotree,parent){
+		combotree.combotree({  
 			method:"GET",
 			url:'admin/organization/selectOrganizationForSelect',  
 			editable:false,
@@ -98,30 +180,26 @@ $(function(){
 				}
 			},
 			onLoadSuccess: function (node,data) { 
-				var row = treegrid.treegrid('getSelections');
-				if(row.length == 0){
-					$("#org-combox").combotree('setValue', { id: data[0].id, text: data[0].text }); 
+				if(parent != null){
+					combotree.combotree('setValue', { id: parent.orgId, text: parent.orgName });
 				}else{
-					$("#org-combox").combotree('setValue', { id: row[0].orgId, text: row[0].orgName }); 
+					var row = treegrid.treegrid('getSelections');
+					if(row.length == 0){
+						combotree.combotree('setValue', { id: data[0].id, text: data[0].text }); 
+					}else{
+						combotree.combotree('setValue', { id: row[0].orgId, text: row[0].orgName }); 
+					}
 				}
 			}
 		});  
 	}
 
-	function formAddSubmit(){
-		$('#organization-form').form('submit', {
-			url:'admin/organization/insertOrUpdateOrganization',
-			onSubmit: function(){
-				return $(this).form('enableValidation').form('validate');
-			},
-			success:function(data){
-				$('#organization-box').dialog("close");
-				$('#organization-form').form("clear");
-				treegrid.treegrid("reload");
-			}
-		});
-	}
+	//################################	删除开始	##################################
 
+	$("#delete").click(function(){
+		doDelete();
+	});
+	
 	//删除数据
 	function doDelete() {
 		var selectRows =treegrid.treegrid("getSelections");
@@ -134,10 +212,9 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/organization/DeleteOrganizationById",
+					url: "admin/organization/delete/"+selectRows[0].orgId,
 					type: "post",
 					dataType: "json",
-					data:{"id": selectRows[0].orgId},
 					success: function (data) {
 						MaskUtil.unmask();
 						if(data.code == 200){
@@ -152,4 +229,6 @@ $(function(){
 		});
 	}
 
+	//################################	删除结束	##################################
+	
 });

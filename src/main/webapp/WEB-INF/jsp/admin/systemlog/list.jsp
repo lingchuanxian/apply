@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@	taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,11 +32,13 @@
 						<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td class="td_description">描述：<input class="easyui-textbox"
 							type="text" id="search-description" style="width: 200px" /></td>
-						<td class="td_method" style="display:none;">方法名称：<input class="easyui-textbox"
-							type="text" id="search-method" style="width: 200px" /></td>
-						<td class="td_datetime" style="display: none;">
-						开始时间：<input type="text" class="easyui-datetimebox" id="search-date-start" style="width: 170px"
-							required="required"> 结束时间：<input type="text" id="search-date-end" style="width: 170px"
+						<td class="td_method" style="display: none;">方法名称：<input
+							class="easyui-textbox" type="text" id="search-method"
+							style="width: 200px" /></td>
+						<td class="td_datetime" style="display: none;">开始时间：<input
+							type="text" class="easyui-datetimebox" id="search-date-start"
+							style="width: 170px" required="required"> 结束时间：<input
+							type="text" id="search-date-end" style="width: 170px"
 							class="easyui-datetimebox" required="required">
 						</td>
 						<td colspan="2" style="padding-left: 20px;"><a
@@ -41,39 +49,44 @@
 			</form>
 		</fieldset>
 	</div>
-
+	<div id="toolbar">
+		<shiro:hasPermission name="system:systemlog:show">
+			<a href="javascript:;" class="easyui-linkbutton"
+				iconCls="icon-application-form-magnify" plain="true" id="show">查看详情</a>
+		</shiro:hasPermission>
+	</div>
 	<div data-options="region:'center',split:false">
 		<table id="systemlog-tb"></table>
 	</div>
 
 	<div class="box" id="systemlog-detail-box" style="display: none;">
-			<table class="rb-add-user" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td class="td_key">操作描述：</td>
-					<td class="td_val lg_description"></td>
-				</tr>
-				<tr>
-					<td class="td_key">操作请求方法：</td>
-					<td class="td_val lg_method"></td>
-				</tr>
+		<table class="rb-add-user" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="td_key">操作描述：</td>
+				<td class="td_val lg_description"></td>
+			</tr>
+			<tr>
+				<td class="td_key">操作请求方法：</td>
+				<td class="td_val lg_method"></td>
+			</tr>
 
-				<tr>
-					<td class="td_key">请求参数：</td>
-					<td class="td_val lg_params"></td>
-				</tr>
-				<tr>
-					<td class="td_key">操作者：</td>
-					<td class="td_val lg_create_user"></td>
-				</tr>
-				<tr>
-					<td class="td_key">操作IP地址：</td>
-					<td class="td_valv lg_create_ip"></td>
-				</tr>
-				<tr>
-					<td class="td_key">操作时间：</td>
-					<td class="td_val lg_create_date"></td>
-				</tr>
-			</table>
+			<tr>
+				<td class="td_key">请求参数：</td>
+				<td class="td_val lg_params"></td>
+			</tr>
+			<tr>
+				<td class="td_key">操作者：</td>
+				<td class="td_val lg_create_user"></td>
+			</tr>
+			<tr>
+				<td class="td_key">操作IP地址：</td>
+				<td class="td_valv lg_create_ip"></td>
+			</tr>
+			<tr>
+				<td class="td_key">操作时间：</td>
+				<td class="td_val lg_create_date"></td>
+			</tr>
+		</table>
 	</div>
 
 	<script type="text/javascript" src="static/js/systemlog-manage.js"></script>

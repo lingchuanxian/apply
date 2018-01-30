@@ -78,15 +78,28 @@
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
-	
+
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
 		<param-value>classpath:log4j.properties</param-value>
 	</context-param>
-	
-	<context-param>  
-    <param-name>webAppRootKey</param-name>  
-    <param-value>webApp.root</param-value>  
-  </context-param>  
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>webApp.root</param-value>
+	</context-param>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/common/403</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/common/404</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common/500</location>
+	</error-page>
 
 </web-app>

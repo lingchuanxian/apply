@@ -43,9 +43,9 @@ public class SystemLogController extends BaseController{
 	public String systemlogList() {
 		return "admin/systemlog/list";
 	}
-    
+
     @RequiresPermissions("system:systemlog:select")
-	@GetMapping("selectSystemLogOfAll")
+	@PostMapping("selectSystemLogOfAll")
     @ResponseBody
     public Result selectSystemLogOfAll(int page,int rows,String stype,String skey) {
     	logger.debug("stype:"+stype+"---skey:"+skey);

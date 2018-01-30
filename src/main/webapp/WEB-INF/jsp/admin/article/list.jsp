@@ -22,35 +22,6 @@
 <script charset="UTF-8" src="static/kindeditor/kindeditor-min.js"></script>
 <script charset="UTF-8" src="static/kindeditor/lang/zh_CN.js"></script>
 <script charset="UTF-8" src="static/kindeditor/plugins/code/prettify.js"></script>
-<script>
-	KindEditor
-			.ready(function(K) {
-				var editor1 = K
-						.create(
-								'textarea[name="artContent"]',
-								{
-									cssPath : '${pageContext.request.contextPath }/static/kindeditor/plugins/code/prettify.css',
-									uploadJson : '${pageContext.request.contextPath }/static/kindeditor/jsp/upload_json.jsp',
-									fileManagerJson : '${pageContext.request.contextPath }/static/kindeditor/jsp/file_manager_json.jsp',
-									allowFileManager : true,
-									afterCreate : function() {
-										var self = this;
-										K.ctrl(document, 13, function() {
-											self.sync();
-											document.forms['example'].submit();
-										});
-										K.ctrl(self.edit.doc, 13, function() {
-											self.sync();
-											document.forms['example'].submit();
-										});
-									},
-									afterBlur : function() {
-										this.sync();
-									}
-								});
-				prettyPrint();
-			});
-</script>
 </head>
 <body class="easyui-layout" fit="true" border="false">
 	<div data-options="region:'north'" style="height: 100px;">
@@ -83,20 +54,20 @@
 
 	<div id="toolbar">
 		<shiro:hasPermission name="system:article:insert">
-			<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-application-form-add" plain="true"
-				id="add">新增</a>
+			<a href="javascript:;" class="easyui-linkbutton"
+				iconCls="icon-application-form-add" plain="true" id="add">新增</a>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="system:article:update">
-			<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-application-form-edit" plain="true"
-				id="edit">编辑</a>
+			<a href="javascript:;" class="easyui-linkbutton"
+				iconCls="icon-application-form-edit" plain="true" id="edit">编辑</a>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="system:article:delete">
-			<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-application-form-delete" plain="true"
-				id="delete">删除</a>
+			<a href="javascript:;" class="easyui-linkbutton"
+				iconCls="icon-application-form-delete" plain="true" id="delete">删除</a>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="system:article:select">
-			<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-application-form-magnify" plain="true"
-				id="show">查看</a>
+			<a href="javascript:;" class="easyui-linkbutton"
+				iconCls="icon-application-form-magnify" plain="true" id="show">查看</a>
 		</shiro:hasPermission>
 	</div>
 
@@ -110,8 +81,8 @@
 				<tr>
 					<td class="td_key">文章标题：</td>
 					<td class="td_val" colspan="3"><input class="easyui-textbox"
-						id="artTitle" type="text" name="artTitle" style="width: 588px;" 
-						data-options="required:true" missingMessage="请输入文章标题"/></td>
+						id="artTitle" type="text" name="artTitle" style="width: 588px;"
+						data-options="required:true" missingMessage="请输入文章标题" /></td>
 				</tr>
 				<tr>
 					<td class="td_key">文章类别：</td>
@@ -142,11 +113,46 @@
 		</form>
 	</div>
 
+	<div class="box" id="article-edit-box" style="display: none;">
+		<form id="article-edit-form" method="post">
+			<table class="rb-add-user" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="td_key">文章标题：</td>
+					<td class="td_val" colspan="3"><input type="hidden"
+						name="artId" id="editId"> <input class="easyui-textbox"
+						id="editTitle" type="text" name="artTitle" style="width: 588px;" data-options="required:true" missingMessage="请输入文章标题" /></td>
+				</tr>
+				<tr>
+					<td class="td_key">文章类别：</td>
+					<td class="td_val"><input class="easyui-combobox"
+						editable="false" id="type-combox2" style="width: 588px;"
+						name="artType" /></td>
+				</tr>
+
+				<tr>
+					<td class="td_key">文章内容：</td>
+					<td class="td_val" colspan="3"><textarea rows="8"
+							id="editContent" style="width: 100%; height: 400px;"
+							name="artContents"></textarea></td>
+				</tr>
+				<tr>
+					<td class="td_key">文章置顶：</td>
+					<td class="td_val"><select class="easyui-combobox"
+						name="artTop" id="top" editable="false" style="width: 588px;">
+							<option value=0>不置顶</option>
+							<option value=1>置顶</option>
+					</select></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+
 	<div class="box" id="article-detail-box" style="display: none;">
 		<table border="0" cellspacing="0" cellpadding="0"
-			style="width: 900px;">
+			style="width: 950px;">
 			<tr>
-				<td class="title"></td>
+				<td class="title" style="font-size:20px;font-weight:bold;padding-top:25px;padding-bottom:20px;"></td>
 			</tr>
 			<tr>
 				<td class="sec"></td>

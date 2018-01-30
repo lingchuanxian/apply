@@ -32,25 +32,25 @@ import cn.fjlcx.application.service.DepartmentService;
 @Controller
 @RequestMapping("admin/department")
 public class DepartmentController extends BaseController{
-	
+
 	@Resource
 	private DepartmentService departmentService;
-	
+
 	@RequiresPermissions("system:department:list")
 	@GetMapping("list")
 	public String departmentList() {
 		return "admin/department/list";
 	}
-	
+
 	/**
 	 * 查询置顶机构下的部门
 	 * @param id
 	 * @return
 	 */
 	@RequiresPermissions("system:department:select")
-	@PostMapping("GetDepartmentByOrgId")
+	@PostMapping("selectDepByOrg")
 	@ResponseBody
-	public Result GetMenuById(@RequestParam int id) {
+	public Result selectDepByOrg(@RequestParam int id) {
 		List<Department> depList = departmentService.selectDepByOrgId(id);
 		return ResultGenerator.genSuccessResult(depList);
 	}
@@ -75,41 +75,50 @@ public class DepartmentController extends BaseController{
 		}
 		return ResultGenerator.genSuccessResult(TreeJson.formatTree(treeList));
 	}
-	
+
 	/**
-	 * 添加或更新部门信息
+	 * 添加部门信息
 	 * @param dep
 	 * @return
 	 */
 	@RequiresPermissions("system:department:insert")
-	@PostMapping("AddOrUpdateDep")
-	@SystemControllerLog(description = "新增或更新部门信息")   
+	@PostMapping("insert")
+	@SystemControllerLog(description = "新增部门信息")   
 	@ResponseBody
-	public Result AddOrUpdateDep(@ModelAttribute Department dep) {
-		logger.info("dep:"+dep.toString());
-		if(dep.getDepId() == null) {
-			dep.setDepOrder(departmentService.selectMaxOrder()+1);
-			departmentService.save(dep);
-		}else {
-			departmentService.update(dep);
-		}
-		return ResultGenerator.genSuccessResult().setMessage("修改成功");
+	public Result AddDep(@ModelAttribute Department dep) {
+		dep.setDepOrder(departmentService.selectMaxOrder()+1);
+		departmentService.save(dep);
+		return ResultGenerator.genSuccessResult().setMessage("新增成功");
 	}
 	
+	/**
+	 * 更新部门信息
+	 * @param dep
+	 * @return
+	 */
+	@RequiresPermissions("system:department:update")
+	@PostMapping("update")
+	@SystemControllerLog(description = "更新部门信息")   
+	@ResponseBody
+	public Result updateDep(@ModelAttribute Department dep) {
+		departmentService.update(dep);
+		return ResultGenerator.genSuccessResult().setMessage("修改成功");
+	}
+
 	/**
 	 * 删除指定部门(假删除)
 	 * @param id
 	 * @return
 	 */
 	@RequiresPermissions("system:department:delete")
-	@PostMapping("DeleteDepById")
+	@PostMapping("delete")
 	@SystemControllerLog(description = "根据id删除指定部门") 
 	@ResponseBody
 	public Result DeleteDepById(@RequestParam int id) {
 		departmentService.falseDeletion(id);
 		return ResultGenerator.genSuccessResult().setMessage("删除成功");
 	}
-	
+
 	/**
 	 * 交换相邻部门的位置
 	 * @param id1

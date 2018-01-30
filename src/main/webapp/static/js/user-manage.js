@@ -76,7 +76,8 @@ $(function(){
 				}
 			}
 			]],
-			toolbar:[{
+			toolbar:'#toolbar',
+				/*[{
 				text:'新增',
 				iconCls:'icon-user-add',
 				handler:function(){
@@ -129,10 +130,10 @@ $(function(){
 				handler:function(){
 					changeState(1);
 				}
-			}],
+			}],*/
 			onBeforeLoad:function(){
-				$("#start").hide();
-				$("#stop").hide();
+				$("#enable").hide();
+				$("#disable").hide();
 			},
 			onLoadSuccess: function(row){
 				$(".state-yes").linkbutton({ text: '是', plain: true, iconCls: 'icon-ok' });
@@ -140,11 +141,11 @@ $(function(){
 			},
 			onSelect:function(rowIndex, rowData){  
 				if(rowData.usState == 0){
-					$("#stop").show();
-					$("#start").hide();
+					$("#disable").show();
+					$("#enable").hide();
 				}else{
-					$("#start").show();
-					$("#stop").hide();
+					$("#enable").show();
+					$("#disable").hide();
 				}
 			},
 	});
@@ -156,8 +157,39 @@ $(function(){
 		displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录', 
 	}); 
 
+	$("#add").click(function(){
+		loadCombotreeOfOrg();
+		getRoleType($('#role-combox'));
+		$("#user-form").form("disableValidation");
+		$('#user-box').dialog("open");
+	});
+	
+	$("#resetpwd").click(function(){
+		resetPassword();
+	});
+	
+	$("#show").click(function(){
+		showDetail();
+	});
+	
+	$("#delete").click(function(){
+		doDelete();
+	});
+	
+	$("#show-role").click(function(){
+		showRole();
+	});
+	
+	$("#enable").click(function(){
+		changeState(0);
+	});
+	
+	$("#disable").click(function(){
+		changeState(1);
+	});
+	
 	//查看角色
-	function showRole(datagrid) {
+	function showRole() {
 		var selectRows =datagrid.datagrid("getSelections");
 		if (selectRows.length < 1) {
 			$.messager.alert("提示消息", "请选择要查看的用户!");
@@ -225,20 +257,17 @@ $(function(){
 				},  
 			}
 			]],
-			toolbar:[{
-				text:'移除角色',
-				iconCls:'icon-user-delete',
-				handler:function(){
-					RemoveRoleUser($("#user-role-tb"));
-				}
-			}],
-
+			toolbar:'#toolbar2',
 			onLoadSuccess: function(data){
 				if (data.total == 0) { 
 					//添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数 
 					$(this).datagrid('appendRow', { rlName: '<div style="color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 0, field: 'rlName', colspan: 2 }); 
 				} 
 			},
+		});
+		
+		$("#add2").click(function(){
+			RemoveRoleUser($("#user-role-tb"));
 		});
 
 		$('#user_role').dialog({
@@ -323,7 +352,7 @@ $(function(){
 	}
 
 	//删除数据
-	function doDelete(datagrid) {
+	function doDelete() {
 		var selectRows =datagrid.treegrid("getSelections");
 		if (selectRows.length < 1) {
 			$.messager.alert("提示消息", "请选择要删除的用户!");

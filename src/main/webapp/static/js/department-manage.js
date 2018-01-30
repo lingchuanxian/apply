@@ -23,12 +23,12 @@ $(function(){
 	
 	var datagrid; //定义全局变量datagrid
 	var editRow = undefined; //定义全局变量：当前编辑的行
-	
+	var flag = 0;//1--新增  2--更新
 	function loadMenu(nodeId,text){
 		datagrid = $("#DepManage").datagrid({
 			title:text,
 			method:"POST",
-			url:"admin/department/GetDepartmentByOrgId",
+			url:"admin/department/selectDepByOrg",
 			idField:'depId',
 			rownumbers: true,
 			striped: true, //行背景交换
@@ -81,8 +81,14 @@ $(function(){
 				$("#cancle").show();
 			},
 			onAfterEdit:function(index,row){
+				var url = "";
+				if(flag == 1){
+					url = "admin/department/insert";
+				}else if(flag == 2){
+					url = "admin/department/update";
+				}
 				$.ajax({
-					url:'admin/department/AddOrUpdateDep',
+					url:url,
 					type:'post',
 					dataType: 'json',
 					data: {  
@@ -93,6 +99,7 @@ $(function(){
 						"depOrgid":nodeId
 					},
 					success:function(data){
+						
 						if(data.code == 200){
 							$("#save").hide();
 							$("#cancle").hide();
@@ -114,6 +121,7 @@ $(function(){
 	}
 
 	$("#add").click(function(){
+		flag = 1;
 		//添加时先判断是否有开启编辑的行，如果有则把开户编辑的那行结束编辑
 		if (editRow != undefined) {
 			datagrid.datagrid("endEdit", editRow);
@@ -134,6 +142,7 @@ $(function(){
 	
 	
 	$("#edit").click(function(){
+		flag = 2;
 		//修改时要获取选择到的行
 		var rows = datagrid.datagrid("getSelections");
 		//如果只选择了一行则可以进行修改，否则不操作
@@ -268,7 +277,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/department/DeleteDepById",
+					url: "admin/department/delete",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].depId},

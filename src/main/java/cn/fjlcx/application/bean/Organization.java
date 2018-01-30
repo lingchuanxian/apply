@@ -32,7 +32,16 @@ public class Organization {
     @Transient
     private List<Organization> children = new ArrayList<Organization>();
     
-    public int getOrgIsDel() {
+    @Transient
+    private Organization parent;
+    
+    public Organization getParent() {
+		return parent;
+	}
+	public void setParent(Organization parent) {
+		this.parent = parent;
+	}
+	public int getOrgIsDel() {
 		return orgIsDel;
 	}
 	public void setOrgIsDel(int orgIsDel) {
@@ -136,7 +145,7 @@ public class Organization {
         if (list != null && list.size() > 0) {  
             for(int i= 0; i < list.size(); i++){  
                         //如果该节点没有父节点那么它就是根（root）节点  
-                       if(list.get(i).getOrgPid() == 0){  
+                       if(list.get(i).getParent() == null){  
                     	   root = list.get(i) ;  
                             //获取该根节点的子节点  
                            getChildrenNodes(list,root);  

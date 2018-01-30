@@ -7,7 +7,7 @@ $(function(){
 	var editRow = undefined; //定义全局变量：当前编辑的行
 	datagrid = $("#systemlog-tb").datagrid({
 		dnd: true,
-		method:"GET",
+		method:"POST",
 		url:"admin/systemlog/selectSystemLogOfAll",
 		idField:'lgId',
 		rownumbers: true,
@@ -60,13 +60,7 @@ $(function(){
 			},  
 		}
 		]],
-		toolbar:[{
-			text:'查看详情',
-			iconCls:'icon-application-form-magnify',
-			handler:function(){
-				showLogDetail();
-			}
-		}],
+		toolbar:'#toolbar',	
 		onLoadSuccess: function(row){
 			datagrid.datagrid("unselectAll");
 		},
@@ -121,6 +115,10 @@ $(function(){
 			});
 		}
 	}
+	
+	$("#show").click(function(){
+		showLogDetail();
+	});
 	
 	$('#systemlog-detail-box').dialog({
 		title: '日志详情',

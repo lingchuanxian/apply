@@ -111,7 +111,7 @@ public class RoleController  extends BaseController{
 	 * @param ids
 	 * @return
 	 */
-	@RequiresPermissions("system:role:updatemenu")
+	@RequiresPermissions("system:role:updatepermission")
 	@PostMapping("SaveRoleMenu")
 	@SystemControllerLog(description = "更新角色-菜单的绑定关系")
 	@ResponseBody

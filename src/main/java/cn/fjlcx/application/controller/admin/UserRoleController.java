@@ -6,11 +6,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -23,10 +25,13 @@ import cn.fjlcx.application.core.ResultGenerator;
 import cn.fjlcx.application.service.UserRoleService;
 
 /**
- *  @author ling_cx 
- *  @date   2017/09/25.
+ * @author ling_cx
+ * @version 1.0
+ * @Description 
+ * @date 2018年1月30日 上午10:54:17
+ * @Copyright: 2018 www.lingcx.cn Inc. All rights reserved.
  */
-@RestController
+@Controller
 @RequestMapping("admin/userRole")
 public class UserRoleController  extends BaseController{
 	
@@ -40,7 +45,9 @@ public class UserRoleController  extends BaseController{
      * @param rows
      * @return
      */
+    @RequiresPermissions("system:userRole:select")
     @GetMapping("SelectUserByRid")
+    @ResponseBody
     public Result SelectUserByRid(@RequestParam int id,int page,int rows) {
 		PageHelper.startPage(page, rows);//设置分页
 		List<UserRole> listUserRole = userRoleService.selectUserRoleByRoleId(id);
@@ -57,7 +64,9 @@ public class UserRoleController  extends BaseController{
      * @param uids
      * @return
      */
+    @RequiresPermissions("system:userRole:insert")
     @PostMapping("AddUserToRole")
+    @ResponseBody
     @SystemControllerLog(description = "给用户赋予新的角色")
     public Result AddUserToRole(@RequestParam int rid,@RequestParam String uids) {
     	logger.info("rid:"+rid+"--uids:"+uids);
@@ -76,7 +85,9 @@ public class UserRoleController  extends BaseController{
      * @param ids
      * @return
      */
+    @RequiresPermissions("system:userRole:delete")
     @PostMapping("RemoveUserOfRole")
+    @ResponseBody
     @SystemControllerLog(description = "移除用户的指定角色")
     public Result RemoveUserOfRole(@RequestParam String ids) {
     	logger.info("ids:"+ids);
@@ -92,7 +103,9 @@ public class UserRoleController  extends BaseController{
      * @param id
      * @return
      */
+    @RequiresPermissions("system:userRole:selectbyuser")
     @PostMapping("SelectUserRoleByUid")
+    @ResponseBody
     public Result SelectUserRoleByUid(@RequestParam int id) {
     	List<UserRole> listRole = userRoleService.selectUserRoleByUserId(id);
     	return ResultGenerator.genSuccessResult(listRole);

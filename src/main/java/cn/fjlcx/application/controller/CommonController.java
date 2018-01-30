@@ -15,7 +15,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +44,10 @@ import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * @author ling_cx
- * @date 2017/09/26.
+ * @version 1.0
+ * @Description 
+ * @date 2018年1月30日 上午10:57:17
+ * @Copyright: 2018 www.lingcx.cn Inc. All rights reserved.
  */
 @Controller
 public class CommonController extends BaseController{
@@ -72,9 +74,20 @@ public class CommonController extends BaseController{
 		return "login";
 	}
 
-	@GetMapping("404")
-	public String errotPage() {
+	@GetMapping("common/403")
+	public String errorPage403() {
+		return "403";
+	}
+	
+	@GetMapping("common/404")
+	
+	public String errorPage404() {
 		return "404";
+	}
+	
+	@GetMapping("common/405")
+	public String errorPage405() {
+		return "405";
 	}
 
 	@GetMapping("refuse")
@@ -82,19 +95,10 @@ public class CommonController extends BaseController{
 		return "refuse";
 	}
 
+	@RequiresAuthentication
 	@GetMapping("admin/index")
 	public String index() {
 		return "admin/index";
-	}
-
-	@GetMapping("admin/rolemenu/list")
-	public String rolemenuList() {
-		return "admin/rolemenu/list";
-	}
-
-	@GetMapping("admin/gencode/list")
-	public String gencodeList() {
-		return "admin/gencode/list";
 	}
 
 	/**

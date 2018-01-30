@@ -27,7 +27,7 @@
 			<a href="javascript:;" class="easyui-linkbutton"
 				iconCls="icon-application-form-add" plain="true" id="add">新增</a>
 		</shiro:hasPermission>
-		<shiro:hasPermission name="system:department:edit">
+		<shiro:hasPermission name="system:department:update">
 			<a href="javascript:;" class="easyui-linkbutton"
 				iconCls="icon-application-form-edit" plain="true" id="edit">编辑</a>
 		</shiro:hasPermission>

@@ -170,7 +170,7 @@ public class MenuController extends BaseController{
 		return ResultGenerator.genSuccessResult().setMessage("修改成功");
 	}
 
-	@RequiresPermissions("system:menu:select")
+	@RequiresPermissions("system:role:updatepermission")
 	@GetMapping("SelectMenuByRidWithChecked")
 	@ResponseBody
 	public Result SelectMenuByRidWithChecked(@RequestParam int rid) {

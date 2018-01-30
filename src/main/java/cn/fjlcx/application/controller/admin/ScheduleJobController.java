@@ -17,8 +17,11 @@ import cn.fjlcx.application.core.ResultGenerator;
 import cn.fjlcx.application.service.ScheduleJobService;
 
 /**
- *  @author ling_cx 
- *  @date   2017/12/25.
+ * @author ling_cx
+ * @version 1.0
+ * @Description 
+ * @date 2018年1月30日 上午10:54:27
+ * @Copyright: 2018 www.lingcx.cn Inc. All rights reserved.
  */
 @RestController
 @RequestMapping("/schedule/job")

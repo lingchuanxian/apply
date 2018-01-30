@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -214,6 +215,7 @@ public class UserController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@RequiresAuthentication
 	@PostMapping("ModifyUserPassword")
 	@SystemControllerLog(description = "修改密码信息")
 	@ResponseBody

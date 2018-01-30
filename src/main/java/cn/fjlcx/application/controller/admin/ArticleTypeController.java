@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import cn.fjlcx.application.config.SystemControllerLog;
 import cn.fjlcx.application.core.Result;
 import cn.fjlcx.application.core.ResultGenerator;
 import cn.fjlcx.application.service.ArticleTypeService;
-
 
 /**
  * @author ling_cx
