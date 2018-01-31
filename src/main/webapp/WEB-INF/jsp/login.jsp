@@ -27,7 +27,7 @@
 	</div>
 
 	<div class="copyright">
-		© 2016品牌名称 by <a href="http://www.mycodes.net/" target="_blank">源码之家</a>
+		© 2018 All Right Reserve <a href="http://www.lingcx.cn/" target="_blank">ling_cx</a>
 	</div>
 	<script type="text/javascript" src="static/js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="static/layer/layer.js"></script>

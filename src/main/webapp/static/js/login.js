@@ -15,10 +15,14 @@ $(function(){
 		var pwd = $("#pwd").val();
 		if(name == ''){
 			layer.msg('请输入登录帐号');
+			$("#name").focus();
+			$("#name").css("background-color","#FFFFCC");
 			return;
 		}
 		if(pwd == ''){
 			layer.msg('请输入密码');
+			$("#pwd").focus();
+			$("#pwd").css("background-color","#FFFFCC");
 			return;
 		}
 		$.ajax({
