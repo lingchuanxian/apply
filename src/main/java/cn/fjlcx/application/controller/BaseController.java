@@ -34,6 +34,14 @@ public class BaseController {
 		return user;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Menu> GetMenuSesseion() {
+		Subject currentUser = SecurityUtils.getSubject();
+		Session session = currentUser.getSession();
+		List<Menu> menu = (List<Menu>)session.getAttribute(Constant.LOGIN_USER_MENU);	
+		return menu;
+	}
+	
 	public void MenuToTreeJson(List<TreeJson> tjs, List<Menu> menuList) {
 		for (Menu menu : menuList) {  
 			TreeJson tj=new TreeJson();  

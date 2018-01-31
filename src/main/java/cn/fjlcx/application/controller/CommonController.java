@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -78,13 +79,13 @@ public class CommonController extends BaseController{
 	public String errorPage403() {
 		return "403";
 	}
-	
+
 	@GetMapping("common/404")
-	
+
 	public String errorPage404() {
 		return "404";
 	}
-	
+
 	@GetMapping("common/405")
 	public String errorPage405() {
 		return "405";
@@ -123,13 +124,26 @@ public class CommonController extends BaseController{
 				Session session = currentUser.getSession();
 				User user = mUserService.selectUserWithRole(username);
 				List<Role> roles = new ArrayList<>();
+				//查询用户角色
 				List<UserRole> roleList = userRoleService.selectUserRoleByUserId(user.getUsId());
 				for(UserRole urole:roleList) {
 					Role role = urole.getUrRole();
 					roles.add(role);
 				}
 				user.setRoles((List<Role>) SortListUtil.sort(roles,"rlOrder","asc"));
+				//查询角色菜单
+				List<Menu> menuList = new ArrayList<>();
+				for(Role role : roles) {
+					List<RoleMenu> rolemenu = roleMenuService.selectMenuByRole(role.getRlId());
+					for(RoleMenu rm :rolemenu) {
+						Menu menu = rm.getMenu();
+						if(!menuList.contains(menu)){
+							menuList.add(menu);
+						}
+					}
+				}
 				session.setAttribute(Constant.LOGIN_USER,user);
+				session.setAttribute(Constant.LOGIN_USER_MENU,menuList);
 				return ResultGenerator.genSuccessResult().setMessage("登录成功");
 			}else {
 				token.clear();
@@ -166,23 +180,17 @@ public class CommonController extends BaseController{
 	@RequiresAuthentication
 	@ResponseBody
 	public Result GetMenuParent(@RequestParam int id) {
-		User user = GetLoginSesseion();
-
-		List<Role> roles = user.getRoles();
-		List<Menu> menuList = new ArrayList<>();
-		for(Role role : roles) {
-			List<RoleMenu> rolemenu = roleMenuService.selectMenuByRole(role.getRlId());
-			for(RoleMenu rm :rolemenu) {
-				Menu menu = rm.getMenu();
-				if(menu.getMuPid() == id) {
-					if(!menuList.contains(menu)){
-						menuList.add(menu);
-					}
+		List<Menu> resultMenuList = new ArrayList<>();
+		List<Menu> menuList = GetMenuSesseion();
+		for(Menu menu :menuList) {
+			if(menu.getMuPid() == id) {
+				if(!resultMenuList.contains(menu)){
+					resultMenuList.add(menu);
 				}
 			}
 		}
 		@SuppressWarnings("unchecked")
-		List<Menu> menuListOrder = (List<Menu>)SortListUtil.sort(menuList,"muOrder",SortListUtil.ASC);
+		List<Menu> menuListOrder = (List<Menu>)SortListUtil.sort(resultMenuList,"muOrder",SortListUtil.ASC);
 		return ResultGenerator.genSuccessResult(menuListOrder);
 	}
 
@@ -195,22 +203,17 @@ public class CommonController extends BaseController{
 	@ResponseBody
 	public Result GetMenuChildren(@RequestParam int id) {
 		List<TreeJson> tjs=new ArrayList<TreeJson>();  
-		User user = GetLoginSesseion();
-		List<Role> roles = user.getRoles();
-		List<Menu> menuList = new ArrayList<>();
-		for(Role role : roles) {
-			List<RoleMenu> rolemenu = roleMenuService.selectMenuByRole(role.getRlId());
-			for(RoleMenu rm :rolemenu) {
-				Menu menu = rm.getMenu();
-				if(menu.getMuType() == 0) {
-					if(!menuList.contains(menu)){
-						menuList.add(menu);
-					}
+		List<Menu> resultMenuList = new ArrayList<>();
+		List<Menu> menuList = GetMenuSesseion();
+		for(Menu menu :menuList) {
+			if(menu.getMuPid() == id) {
+				if(!resultMenuList.contains(menu)){
+					resultMenuList.add(menu);
 				}
 			}
 		}
 		@SuppressWarnings("unchecked")
-		List<Menu> menuListOrder = (List<Menu>)SortListUtil.sort(menuList,"muOrder",SortListUtil.ASC);
+		List<Menu> menuListOrder = (List<Menu>)SortListUtil.sort(resultMenuList,"muOrder",SortListUtil.ASC);
 		MenuToTreeJson(tjs, menuListOrder);  
 		TreeJson root = new TreeJson(); 
 		List<TreeJson> treelist = new ArrayList<TreeJson>();//拼凑好的json格式的数据       
@@ -237,7 +240,7 @@ public class CommonController extends BaseController{
 	public Result logout() {
 		return ResultGenerator.genSuccessResult("退出成功");
 	}
-	
+
 	/*****************************************JSON WEN TOKEN TEST*******************************************/
 	@GetMapping("JWTTest")
 	public Result JWTTest() {

@@ -11,6 +11,7 @@ public class Constant {
      * session
      */
     public static final String LOGIN_USER = "CURRENT_USER";
+    public static final String LOGIN_USER_MENU = "CURRENT_USER_MENU";
     
     /**
      * other
