@@ -1,6 +1,16 @@
 $(function(){
+	document.onkeydown = function(e){ 
+		var ev = document.all ? window.event : e;
+		if(ev.keyCode==13) {
+			login();
+		}  
+	}
 
 	$("#login").click(function(){
+		login();
+	});
+
+	function login(){
 		var name = $("#name").val();
 		var pwd = $("#pwd").val();
 		if(name == ''){
@@ -35,6 +45,6 @@ $(function(){
 				layer.alert('未知异常', {icon: 2});
 			}
 		});
-	});
+	}
 
-});
+});  
