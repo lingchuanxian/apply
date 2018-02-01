@@ -1,12 +1,13 @@
 package cn.fjlcx.application.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -19,10 +20,13 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.fjlcx.application.bean.Dictionary;
+import cn.fjlcx.application.bean.DictionaryType;
 import cn.fjlcx.application.bean.Menu;
 import cn.fjlcx.application.bean.Role;
 import cn.fjlcx.application.bean.RoleMenu;
@@ -33,6 +37,8 @@ import cn.fjlcx.application.config.Constant;
 import cn.fjlcx.application.core.Result;
 import cn.fjlcx.application.core.ResultGenerator;
 import cn.fjlcx.application.generator.CodeGenerator;
+import cn.fjlcx.application.service.DictionaryService;
+import cn.fjlcx.application.service.DictionaryTypeService;
 import cn.fjlcx.application.service.MenuService;
 import cn.fjlcx.application.service.RoleMenuService;
 import cn.fjlcx.application.service.RoleService;
@@ -63,7 +69,10 @@ public class CommonController extends BaseController{
 	private MenuService menuService;
 	@Resource
 	private RoleMenuService roleMenuService;
-
+    @Resource
+    private DictionaryTypeService dictionaryTypeService;
+    @Resource
+    private DictionaryService dictionaryService;
 
 	@GetMapping("/")
 	public String tlogin() {
@@ -229,6 +238,18 @@ public class CommonController extends BaseController{
 			}  
 		}        
 		return ResultGenerator.genSuccessResult(treelist);
+	}
+	
+	@RequiresAuthentication
+	@PostMapping("admin/selectType/{code}")
+	@ResponseBody
+	public Result selectType(@PathVariable String code) {
+		DictionaryType dt = dictionaryTypeService.selectByCode(code);
+		Map<String,Object> params1 = new HashMap<String, Object>();
+		params1.put("stype", 2);
+		params1.put("skey", dt.getDtId());
+		List<Dictionary> list = dictionaryService.selectDictionaryByCondition(params1);
+		return ResultGenerator.genSuccessResult(list);
 	}
 
 	/**

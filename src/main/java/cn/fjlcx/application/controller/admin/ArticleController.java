@@ -124,10 +124,10 @@ public class ArticleController extends BaseController{
     @PostMapping("update")
     @SystemControllerLog(description = "更新文章")  
     @ResponseBody
-    public Result update(@ModelAttribute Article article,String artContents) {
+    public Result update(@ModelAttribute Article article) {
     	logger.info("article:"+article.toString());
-    	article.setArtContent(artContents);
     	articleService.update(article);
     	return ResultGenerator.genSuccessResult().setMessage("更新成功");
     }
+    
 }

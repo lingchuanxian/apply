@@ -1,7 +1,7 @@
 $(function(){
 	$('#tt').tree({
 		method : 'GET',
-		url : 'admin/organization/selectOrganizationForSelect',
+		url : getRootPath() + 'admin/organization/selectOrganizationForSelect',
 		animate:true,
 		loadFilter: function(data){
 			if (data.code == 200){
@@ -28,7 +28,7 @@ $(function(){
 		datagrid = $("#DepManage").datagrid({
 			title:text,
 			method:"POST",
-			url:"admin/department/selectDepByOrg",
+			url:getRootPath() + "admin/department/selectDepByOrg",
 			idField:'depId',
 			rownumbers: true,
 			striped: true, //行背景交换
@@ -83,9 +83,9 @@ $(function(){
 			onAfterEdit:function(index,row){
 				var url = "";
 				if(flag == 1){
-					url = "admin/department/insert";
+					url = getRootPath() + "admin/department/insert";
 				}else if(flag == 2){
-					url = "admin/department/update";
+					url = getRootPath() + "admin/department/update";
 				}
 				$.ajax({
 					url:url,
@@ -248,7 +248,7 @@ $(function(){
 
 	function exchange(position1,position2){
 		$.ajax({
-			url:'admin/department/ExchangeDepPosition',
+			url:getRootPath() + 'admin/department/ExchangeDepPosition',
 			type:'post',
 			dataType: 'json',
 			data: {  
@@ -277,7 +277,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/department/delete",
+					url: getRootPath() + "admin/department/delete",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].depId},

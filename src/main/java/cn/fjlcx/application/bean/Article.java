@@ -37,16 +37,16 @@ public class Article {
     private String artContent;
     
     @Transient
-    private ArticleType articleType;
+    private Dictionary articleType;
     
     @Transient
     private User user;
     
-    public ArticleType getArticleType() {
+    public Dictionary getArticleType() {
 		return articleType;
 	}
 
-	public void setArticleType(ArticleType articleType) {
+	public void setArticleType(Dictionary articleType) {
 		this.articleType = articleType;
 	}
 

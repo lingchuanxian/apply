@@ -8,7 +8,7 @@ $(function(){
 	treegrid = $("#organization-tb").treegrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/organization/select",
+		url:getRootPath() + "admin/organization/select",
 		idField:'orgId',
 		treeField:'orgName',
 		rownumbers: true,
@@ -81,7 +81,7 @@ $(function(){
 
 	function formAddSubmit(){
 		$('#organization-form').form('submit', {
-			url:'admin/organization/insert',
+			url:getRootPath() + 'admin/organization/insert',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -105,7 +105,7 @@ $(function(){
 		MaskUtil.mask();
 		
 		$.ajax({
-			url: "admin/organization/select/"+selectRows[0].orgId,
+			url: getRootPath() + "admin/organization/select/"+selectRows[0].orgId,
 			type: "post",
 			dataType: "json",
 			success: function (data) {
@@ -153,7 +153,7 @@ $(function(){
 	
 	function formEditSubmit(){
 		$('#organization-edit-form').form('submit', {
-			url:'admin/organization/update',
+			url:getRootPath() + 'admin/organization/update',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -170,7 +170,7 @@ $(function(){
 	function loadCombotree(combotree,parent){
 		combotree.combotree({  
 			method:"GET",
-			url:'admin/organization/selectOrganizationForSelect',  
+			url:getRootPath() + 'admin/organization/selectOrganizationForSelect',  
 			editable:false,
 			loadFilter: function(data){
 				if (data.code == 200){
@@ -212,7 +212,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/organization/delete/"+selectRows[0].orgId,
+					url: getRootPath() + "admin/organization/delete/"+selectRows[0].orgId,
 					type: "post",
 					dataType: "json",
 					success: function (data) {

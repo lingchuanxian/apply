@@ -9,9 +9,9 @@ $(function(){
 				.create(
 						'textarea[name="artContent"]',
 						{
-							cssPath : 'static/kindeditor/plugins/code/prettify.css',
-							uploadJson : 'static/kindeditor/jsp/upload_json.jsp',
-							fileManagerJson : 'static/kindeditor/jsp/file_manager_json.jsp',
+							cssPath : getRootPath() + 'static/kindeditor/plugins/code/prettify.css',
+							uploadJson : getRootPath() + 'static/kindeditor/jsp/upload_json.jsp',
+							fileManagerJson : getRootPath() + 'static/kindeditor/jsp/file_manager_json.jsp',
 							allowFileManager : true,
 							afterCreate : function() {
 								var self = this;
@@ -33,11 +33,11 @@ $(function(){
 	
 	KindEditor.ready(function(K) {
 		editor2 = K
-				.create('textarea[name=artContents]',
+				.create('#editContent',
 						{
-							cssPath : 'static/kindeditor/plugins/code/prettify.css',
-							uploadJson : 'static/kindeditor/jsp/upload_json.jsp',
-							fileManagerJson : 'static/kindeditor/jsp/file_manager_json.jsp',
+							cssPath : getRootPath() + 'static/kindeditor/plugins/code/prettify.css',
+							uploadJson : getRootPath() + 'static/kindeditor/jsp/upload_json.jsp',
+							fileManagerJson :getRootPath() +  'static/kindeditor/jsp/file_manager_json.jsp',
 							allowFileManager : true,
 							afterCreate : function() {
 								var self = this;
@@ -63,7 +63,7 @@ $(function(){
 	datagrid = $("#article-tb").datagrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/article/select",
+		url:getRootPath() + "admin/article/select",
 		idField:'artId',
 		rownumbers: true,
 		checkOnSelect : true,  
@@ -104,7 +104,7 @@ $(function(){
 			width:80,
 			align:'center',
 			formatter:function(val){  
-				return val.atName;
+				return val.dictName;
 			}, 
 		},{
 			field:'artDate',
@@ -177,10 +177,10 @@ $(function(){
 
 	function getArticleType(combobox,type){
 		combobox.combobox({  
-			method:"GET",
-			url:'admin/articleType/select',  
-			valueField:'atId',  
-			textField:'atName',
+			method:"POST",
+			url:getRootPath() + 'admin/selectType/ArticleType',  
+			valueField:'dictId',  
+			textField:'dictName',
 			editable:false,
 			loadFilter: function(data){
 				if (data.code == 200){
@@ -193,7 +193,7 @@ $(function(){
 				var data = $(this).combobox("getData");
 				if(type == 1){
 					if(data.length > 0){
-						$(this).combobox("select", data[0].atId);
+						$(this).combobox("select", data[0].dictId);
 					}
 				}
 			}
@@ -202,7 +202,7 @@ $(function(){
 
 	function formAddSubmit(){
 		$('#article-form').form('submit', {
-			url:'admin/article/insert',
+			url:getRootPath() + 'admin/article/insert',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -227,6 +227,94 @@ $(function(){
 	}
 	
 	//############################	新增结束	###############################
+	
+	//############################	编辑开始	###############################
+	
+	$("#edit").click(function(){
+		articleEdit();
+	});
+	
+	function articleEdit(){
+		var selectRows =datagrid.treegrid("getSelections");
+		if (selectRows.length < 1) {
+			$.messager.alert("提示消息", "请选择要编辑的文章!");
+			return;
+		}else if(selectRows.length > 1){
+			$.messager.alert("提示消息", "只能选择一条的记录!");
+			return;
+		}else{
+			$.ajax({
+				url:getRootPath() + "admin/article/select/"+selectRows[0].artId,
+				type: "post",
+				dataType: "json",
+				success: function (data) {
+					if(data.code == 200){
+						var article = data.data;
+						console.log(article);
+						getArticleType($('#type-combox2'),2);
+						$("#editId").val(article.artId);
+						$("#editTitle").textbox('setValue',article.artTitle);
+						try{
+							editor2.html(article.artContent);
+						}catch(error){
+							$.messager.alert("提示消息", error,"error");
+							return;
+						}
+						$("#type-combox2").combobox("select", article.articleType.dictId);
+						$("#top").combobox("select", article.artTop);
+						$("#article-edit-form").form("disableValidation");
+						$('#article-edit-box').dialog("open");
+					}else{
+						HandleException(data);
+					}
+				}
+			});
+			
+		}
+	}
+	
+	$('#article-edit-box').dialog({
+		title: '文章编辑',
+		width: 1000,
+		height: 800,
+		closed: true,
+		cache: false,
+		modal: true,
+		buttons:[{
+			text:'提交',
+			iconCls:'icon-ok',
+			handler:function(){
+				formEditSubmit();
+			}
+		},{
+			text:'取消',
+			iconCls:'icon-cancel',
+			handler:function(){
+				$('#article-edit-box').dialog("close");
+			}
+		}]
+	});
+	
+	function formEditSubmit(){
+		$('#article-edit-form').form('submit', {
+			url:getRootPath() + 'admin/article/update',
+			onSubmit: function(){
+				return $(this).form('enableValidation').form('validate');
+			},
+			success:function(data){
+				$("#editTitle").textbox('setValue',"");
+				editor2.html("");
+				$("#article-form").form('clear');
+				$('#article-edit-box').dialog("close");
+				datagrid.datagrid("reload");
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	}
+	
+	//############################	编辑结束	###############################
 	
 	//############################	搜索开始	###############################
 	$("#search-type").combobox({
@@ -283,7 +371,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/article/delete",
+					url: getRootPath() + "admin/article/delete",
 					type: "post",
 					dataType: "json",
 					data:{"ids": ids},
@@ -338,7 +426,7 @@ $(function(){
 			return;
 		}else{
 			$.ajax({
-				url: "admin/article/select/"+selectRows[0].artId,
+				url: getRootPath() + "admin/article/select/"+selectRows[0].artId,
 				type: "post",
 				dataType: "json",
 				success: function (data) {
@@ -359,82 +447,7 @@ $(function(){
 			});
 		}
 	}
+	
 	//############################	查看结束	###############################
 	
-	$("#edit").click(function(){
-		articleEdit();
-	});
-	
-	function articleEdit(){
-		var selectRows =datagrid.treegrid("getSelections");
-		if (selectRows.length < 1) {
-			$.messager.alert("提示消息", "请选择要编辑的文章!");
-			return;
-		}else if(selectRows.length > 1){
-			$.messager.alert("提示消息", "只能选择一条的记录!");
-			return;
-		}else{
-			$.ajax({
-				url: "admin/article/select/"+selectRows[0].artId,
-				type: "post",
-				dataType: "json",
-				success: function (data) {
-					if(data.code == 200){
-						var article = data.data;
-						console.log(article);
-						getArticleType($('#type-combox2'),2);
-						$("#editId").val(article.artId);
-						$("#editTitle").textbox('setValue',article.artTitle);
-						editor2.html(article.artContent);
-						$("#type-combox2").combobox("select", article.articleType.atId);
-						$("#top").combobox("select", article.artTop);
-						$("#article-edit-form").form("disableValidation");
-						$('#article-edit-box').dialog("open");
-					}else{
-						HandleException(data);
-					}
-				}
-			});
-			
-		}
-	}
-	
-	$('#article-edit-box').dialog({
-		title: '文章编辑',
-		width: 1000,
-		height: 800,
-		closed: true,
-		cache: false,
-		modal: true,
-		buttons:[{
-			text:'提交',
-			iconCls:'icon-ok',
-			handler:function(){
-				formEditSubmit();
-			}
-		},{
-			text:'取消',
-			iconCls:'icon-cancel',
-			handler:function(){
-				$('#article-edit-box').dialog("close");
-			}
-		}]
-	});
-	
-	function formEditSubmit(){
-		$('#article-edit-form').form('submit', {
-			url:'admin/article/update',
-			onSubmit: function(){
-				return $(this).form('enableValidation').form('validate');
-			},
-			success:function(data){
-				$("#article-form").form('clear');
-				$('#article-edit-box').dialog("close");
-				datagrid.datagrid("reload");
-			},
-			error:function(){
-				alert("error");
-			}
-		});
-	}
 });

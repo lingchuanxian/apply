@@ -8,7 +8,7 @@ $(function(){
 	datagrid = $("#role-tb").datagrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/role/selectAllOfRole",
+		url:getRootPath() + "admin/role/selectAllOfRole",
 		idField:'rlId',
 		rownumbers: true,
 		checkOnSelect : true,  
@@ -72,7 +72,7 @@ $(function(){
 		},
 		onAfterEdit:function(index,row){
 			$.ajax({
-				url:'admin/role/AddOrUpdateRole',
+				url:getRootPath() + 'admin/role/AddOrUpdateRole',
 				type:'post',
 				dataType: 'json',
 				data: {  
@@ -188,7 +188,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/role/DeleteRoleById",
+					url: getRootPath() + "admin/role/DeleteRoleById",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].rlId},
@@ -239,7 +239,7 @@ $(function(){
 
 		user_datagrid = $("#role-user-tb").datagrid({
 			method:"GET",
-			url:"admin/userRole/SelectUserByRid?id="+id,
+			url:getRootPath() + "admin/userRole/SelectUserByRid?id="+id,
 			idField:'urId',
 			fit:true,
 			checkOnSelect : true,  
@@ -319,7 +319,7 @@ $(function(){
 		$.messager.confirm("确认消息", "您确定要移除用户【"+names.substr(0,names.length-1)+"】吗？", function (r) {
 			if (r) {
 				$.ajax({
-					url: "admin/userRole/RemoveUserOfRole",
+					url: getRootPath() + "admin/userRole/RemoveUserOfRole",
 					type: "post",
 					dataType: "json",
 					data:{"ids":ids},
@@ -340,7 +340,7 @@ $(function(){
 
 		user_select_datagrid = $("#user-select-tb").datagrid({
 			method:"GET",
-			url:"admin/user/GetUserListExpectRoleExist?rid="+id,
+			url:getRootPath() + "admin/user/GetUserListExpectRoleExist?rid="+id,
 			idField:'usId',
 			fit:true,
 			checkOnSelect : true,  
@@ -425,7 +425,7 @@ $(function(){
 			uids += selectRows[i].usId+",";
 		} 
 		$.ajax({
-			url: "admin/userRole/AddUserToRole",
+			url: getRootPath() + "admin/userRole/AddUserToRole",
 			type: "post",
 			dataType: "json",
 			data:{"rid": id,"uids":uids},
@@ -483,7 +483,7 @@ $(function(){
 	function loadMenu(id){
 		$('#menu-tree').tree({
 			method:"GET",
-		    url: 'admin/menu/SelectMenuByRidWithChecked?rid='+id,
+		    url: getRootPath() + 'admin/menu/SelectMenuByRidWithChecked?rid='+id,
 		    checkbox:true,
 		    animate:true,
 		    lines:true,
@@ -507,7 +507,7 @@ $(function(){
 	
 	function savePermission(id,ids){
 		$.ajax({
-			url: "admin/role/SaveRoleMenu",
+			url: getRootPath() + "admin/role/SaveRoleMenu",
 			type: "post",
 			dataType: "json",
 			data:{"id":id,"ids":ids},

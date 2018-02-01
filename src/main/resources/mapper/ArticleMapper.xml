@@ -15,7 +15,7 @@
 			javaType="cn.fjlcx.application.bean.User" select="cn.fjlcx.application.mapper.UserMapper.selectUserById">
 		</association>
 		<association property="articleType" column="art_type"
-			javaType="cn.fjlcx.application.bean.ArticleType" select="cn.fjlcx.application.mapper.ArticleTypeMapper.selectArticleTypeById">
+			javaType="cn.fjlcx.application.bean.Dictionary" select="cn.fjlcx.application.mapper.DictionaryMapper.selectDictionaryById">
 		</association>
 	</resultMap>
 

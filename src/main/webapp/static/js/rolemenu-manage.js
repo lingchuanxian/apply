@@ -6,7 +6,7 @@ $(function(){
 	datagrid = $("#role-tb").datagrid({
 		dnd: true,
 		method:"GET",
-		url:"admin/role/selectAllOfRole",
+		url:getRootPath() + "admin/role/selectAllOfRole",
 		idField:'rlId',
 		rownumbers: true,
 		checkOnSelect : true,  
@@ -57,7 +57,7 @@ $(function(){
 	function loadMenu(){
 		treegrid = $('#menu-tt').treegrid({
 			title:'角色的权限设置',
-			url:'admin/menu/MagageMenuList',
+			url:getRootPath() + 'admin/menu/MagageMenuList',
 			idField:'id',
 			treeField:'text',
 			animate:true,
@@ -120,7 +120,7 @@ $(function(){
 	function loadChecked(title){
 		treegrid.treegrid({title:'角色【'+title+'】的权限设置'});
 		$.ajax({
-			url: "admin/role/SelectRoleMenuByRid",
+			url: getRootPath() + "admin/role/SelectRoleMenuByRid",
 			type: "post",
 			dataType: "json",
 			data:{"id":id},
@@ -155,7 +155,7 @@ $(function(){
 			mids += selectRows[i].id+',';
 		}
 		$.ajax({
-			url: "admin/role/SaveRoleMenu",
+			url: getRootPath() + "admin/role/SaveRoleMenu",
 			type: "post",
 			dataType: "json",
 			data:{"id":id,"ids":mids},

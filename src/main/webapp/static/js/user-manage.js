@@ -8,7 +8,7 @@ $(function(){
 	datagrid = $("#user-tb").datagrid({
 		title:"用户列表",
 		method:"GET",
-		url:"admin/user/GetUserList",
+		url:getRootPath() + "admin/user/GetUserList",
 		idField:'usId',
 		rownumbers: true,
 		singleSelect:true,
@@ -201,7 +201,7 @@ $(function(){
 	function showUserRoleDialog(id,name){
 		$("#user-role-tb").datagrid({
 			method:"POST",
-			url:"admin/userRole/SelectUserRoleByUid",
+			url:getRootPath() + "admin/userRole/SelectUserRoleByUid",
 			queryParams: {          
 				id: id            
 			} ,
@@ -305,7 +305,7 @@ $(function(){
 		$.messager.confirm("确认消息", "您确定要移除角色【"+names.substr(0,names.length-1)+"】吗？", function (r) {
 			if (r) {
 				$.ajax({
-					url: "admin/userRole/RemoveUserOfRole",
+					url: getRootPath() + "admin/userRole/RemoveUserOfRole",
 					type: "post",
 					dataType: "json",
 					data:{"ids":ids},
@@ -333,7 +333,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/user/ResetUserPassword",
+					url: getRootPath() + "admin/user/ResetUserPassword",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].usId},
@@ -363,7 +363,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/user/DeleteUserById",
+					url: getRootPath() + "admin/user/DeleteUserById",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].usId},
@@ -435,7 +435,7 @@ $(function(){
 	function loadCombotreeOfOrg(){
 		$("#org-combox").combotree({  
 			method:"GET",
-			url:'admin/organization/selectOrganizationForSelect',  
+			url:getRootPath() + 'admin/organization/selectOrganizationForSelect',  
 			editable:false,
 			loadFilter: function(data){
 				if (data.code == 200){
@@ -457,7 +457,7 @@ $(function(){
 	function loadCombotreeOfDep(id){
 		$("#dep-combox").combotree({  
 			method:"GET",
-			url:'admin/department/selectDepForSelect?id='+id,  
+			url:getRootPath() + 'admin/department/selectDepForSelect?id='+id,  
 			editable:false,
 			loadFilter: function(data){
 				if (data.code == 200){
@@ -476,7 +476,7 @@ $(function(){
 	function getRoleType(combobox){
 		combobox.combobox({  
 			method:"GET",
-			url:'admin/role/selectAllOfRole',  
+			url:getRootPath() + 'admin/role/selectAllOfRole',  
 			valueField:'rlId',  
 			textField:'rlName',
 			editable:false,
@@ -498,7 +498,7 @@ $(function(){
 
 	function formAddSubmit(){
 		$('#user-form').form('submit', {
-			url:'admin/user/AddUser',
+			url:getRootPath() + 'admin/user/AddUser',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -517,7 +517,7 @@ $(function(){
 			return;
 		}else{
 			$.ajax({
-				url: "admin/user/SelectUserById",
+				url: getRootPath() + "admin/user/SelectUserById",
 				type: "post",
 				dataType: "json",
 				data:{"id": selectRows[0].usId},
@@ -555,7 +555,7 @@ $(function(){
 		$.messager.confirm("确认消息", "您确定要"+str+"帐号【"+selectRows[0].usName+"】吗？", function (r) {
 			if (r) {
 				$.ajax({
-					url:'admin/user/UpdateUserState',
+					url:getRootPath() + 'admin/user/UpdateUserState',
 					type:'post',
 					dataType: 'json',
 					data: {  

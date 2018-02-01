@@ -13,9 +13,12 @@ import cn.fjlcx.application.bean.${modelNameUpperCamel};
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- *  @author ${author} 
- *  @date   ${date}.
+ /**
+ * @author ${author} 
+ * @version 1.0
+ * @Description 
+ * @date ${date}.
+ * @Copyright: 2018 www.lingcx.cn Inc. All rights reserved.
  */
 @RestController
 @RequestMapping("${baseRequestMapping}")
@@ -57,7 +60,7 @@ public class ${modelNameUpperCamel}Controller {
 	 */
 	@GetMapping("Select${modelNameUpperCamel}ById")
 	public Result Select${modelNameUpperCamel}ById(@RequestParam int id) {
-		${modelNameLowerCamel} model = ${modelNameUpperCamel}Service.findById(id);
+		${modelNameUpperCamel} model = ${modelNameLowerCamel}Service.findById(id);
 		return ResultGenerator.genSuccessResult(model);
 	}
 

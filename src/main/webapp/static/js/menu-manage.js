@@ -2,7 +2,7 @@
 $(function(){
 	$('#tt').tree({
 		method : 'POST',
-		url : 'admin/menu/MagageMenuList',
+		url : getRootPath() + 'admin/menu/MagageMenuList',
 		animate:true,
 		loadFilter: function(data){
 			if (data.code == 200){
@@ -31,7 +31,7 @@ $(function(){
 		datagrid = $("#FMenuManage").datagrid({
 			title:text,
 			method:"POST",
-			url:"admin/menu/GetMenuChildrenById",
+			url:getRootPath() + "admin/menu/GetMenuChildrenById",
 			idField:'muId',
 			rownumbers: true,
 			fit:false,
@@ -144,7 +144,7 @@ $(function(){
 			},
 			onAfterEdit:function(index,row){
 				$.ajax({
-					url:'admin/menu/UpdateMenu',
+					url:getRootPath() + 'admin/menu/UpdateMenu',
 					type:'post',
 					dataType: 'json',
 					data: {  
@@ -310,7 +310,7 @@ $(function(){
 
 	function exchange(position1,position2){
 		$.ajax({
-			url:'admin/menu/ExchangeMenuPosition',
+			url:getRootPath() + 'admin/menu/ExchangeMenuPosition',
 			type:'post',
 			dataType: 'json',
 			data: {  
@@ -341,7 +341,7 @@ $(function(){
 			if (r) {
 				MaskUtil.mask();
 				$.ajax({
-					url: "admin/menu/DeleteMenuById",
+					url: getRootPath() + "admin/menu/DeleteMenuById",
 					type: "post",
 					dataType: "json",
 					data:{"id": selectRows[0].muId},

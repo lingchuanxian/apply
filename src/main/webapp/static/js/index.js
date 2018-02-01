@@ -3,7 +3,7 @@ $(function(){
 	$.ajax({  
 		type : 'GET',  
 		dataType : "json",  
-		url : 'admin/GetMenuParent',  
+		url : getRootPath() + 'admin/GetMenuParent',  
 		data:{
 			"id":0
 		},
@@ -44,7 +44,7 @@ $(function(){
 	function getChild(id,title){
 		$("#tree_"+id).tree({
 			method : 'GET',
-			url : 'admin/GetMenuChildren?id='+id,
+			url : getRootPath() + 'admin/GetMenuChildren?id='+id,
 			animate:true,
 			loadFilter: function(data){
 				console.log(data);
@@ -130,7 +130,7 @@ $(function(){
 
 	function formAddSubmit(){
 		$('#modify-password-form').form('submit', {
-			url:'admin/user/ModifyUserPassword',
+			url:getRootPath() + 'admin/user/ModifyUserPassword',
 			onSubmit: function(){
 				return $(this).form('enableValidation').form('validate');
 			},
@@ -160,12 +160,4 @@ $(function(){
 		});
 	});
 	
-	$.ajax({
-		url: "admin/organization/selectOrganizationOfAll",
-		type: "get",
-		dataType: "json",
-		success: function (data) {
-			console.log("Organization-list:"+data.code);
-		}
-	});
 });

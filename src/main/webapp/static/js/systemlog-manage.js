@@ -8,7 +8,7 @@ $(function(){
 	datagrid = $("#systemlog-tb").datagrid({
 		dnd: true,
 		method:"POST",
-		url:"admin/systemlog/selectSystemLogOfAll",
+		url:getRootPath() + "admin/systemlog/selectSystemLogOfAll",
 		idField:'lgId',
 		rownumbers: true,
 		checkOnSelect : true, 
@@ -143,7 +143,7 @@ $(function(){
 			return;
 		}else{
 			$.ajax({
-				url: "admin/systemlog/SelectSystemLogById",
+				url: getRootPath() + "admin/systemlog/SelectSystemLogById",
 				type: "get",
 				dataType: "json",
 				data:{"id": selectRows[0].lgId},

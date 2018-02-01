@@ -133,7 +133,7 @@
 					<td class="td_key">文章内容：</td>
 					<td class="td_val" colspan="3"><textarea rows="8"
 							id="editContent" style="width: 100%; height: 400px;"
-							name="artContents"></textarea></td>
+							name="artContent"></textarea></td>
 				</tr>
 				<tr>
 					<td class="td_key">文章置顶：</td>

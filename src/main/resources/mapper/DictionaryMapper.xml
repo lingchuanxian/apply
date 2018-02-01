@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fjlcx.application.mapper.DictionaryMapper">
+	<resultMap id="BaseResultMap" type="cn.fjlcx.application.bean.Dictionary">
+		<!-- WARNING - @mbg.generated -->
+		<id column="dict_id" jdbcType="INTEGER" property="dictId" />
+		<result column="dict_code" jdbcType="VARCHAR" property="dictCode" />
+		<result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+		<result column="dict_order" jdbcType="INTEGER" property="dictOrder" />
+		<result column="dict_description" jdbcType="LONGVARCHAR"
+			property="dictDescription" />
+		<association property="dictType" column="dict_type_id"
+			javaType="cn.fjlcx.application.bean.DictionaryType"
+			select="cn.fjlcx.application.mapper.DictionaryTypeMapper.selectDictionaryTypeById">
+		</association>
+	</resultMap>
+
+	<select id="selectDictionaryByCondition" resultMap="BaseResultMap">
+		select * from oa_dictionary
+		<if test="stype == 0">
+			where dict_code LIKE CONCAT(CONCAT('%',#{skey}),'%')
+		</if>
+		<if test="stype == 1">
+			where dict_name LIKE CONCAT(CONCAT('%',#{skey}),'%')
+		</if>
+		<if test="stype == 2">
+			where dict_type_id = #{skey}
+		</if>
+	</select>
+
+	<select id="selectMaxOrder" resultType="int">
+		select max(dict_order) from oa_dictionary
+	</select>
+	
+	<select id="selectDictionaryById" parameterType="int" resultMap="BaseResultMap">
+		select * from oa_dictionary where dict_id = #{id}
+	</select>
+
+</mapper>

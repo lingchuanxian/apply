@@ -50,7 +50,7 @@
 		</fieldset>
 	</div>
 	<div id="toolbar">
-		<shiro:hasPermission name="system:systemlog:show">
+		<shiro:hasPermission name="system:systemlog:select">
 			<a href="javascript:;" class="easyui-linkbutton"
 				iconCls="icon-application-form-magnify" plain="true" id="show">查看详情</a>
 		</shiro:hasPermission>
