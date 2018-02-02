@@ -37,7 +37,7 @@
 				<tr>
 					<td class="td_key">编码：</td>
 					<td class="td_val"><input class="easyui-textbox" type="text"
-						name="dtCode" data-options="required:true"
+						name="dtCode" data-options="required:true,validType:'isDictionaryTypeCodeExist'"
 						missingMessage="请填写编码" /></td>
 				</tr>
 				<tr>

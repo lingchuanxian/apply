@@ -26,7 +26,7 @@ $(function(){
 			return;
 		}
 		$.ajax({
-			url: getRootPath() + "loginAction",
+			url: "loginAction",
 			type: "POST",
 			dataType: "json",
 			data:{"username": name,"password":pwd},

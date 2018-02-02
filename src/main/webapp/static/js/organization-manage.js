@@ -126,7 +126,6 @@ $(function(){
 			}
 		});
 		
-		
 	});
 	
 	$('#organization-edit-box').dialog({

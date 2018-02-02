@@ -21,7 +21,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import cn.fjlcx.application.bean.Dictionary;
-import cn.fjlcx.application.bean.DictionaryType;
 import cn.fjlcx.application.config.SystemControllerLog;
 import cn.fjlcx.application.core.Result;
 import cn.fjlcx.application.core.ResultGenerator;

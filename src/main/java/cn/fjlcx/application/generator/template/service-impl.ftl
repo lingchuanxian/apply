@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
- *  @author ${author} 
- *  @date   ${date}.
+ * @author ${author} 
+ * @version 1.0
+ * @Description 
+ * @date ${date}.
+ * @Copyright: 2018 www.lingcx.cn Inc. All rights reserved.
  */
 @Service
 @Transactional
@@ -19,4 +22,8 @@ public class ${modelNameUpperCamel}ServiceImpl extends AbstractService<${modelNa
     @Resource
     private ${modelNameUpperCamel}Mapper ${modelNameLowerCamel}Mapper;
 
+	@Override
+	public List<${modelNameUpperCamel}> select${modelNameUpperCamel}ByCondition(Map<String, Object> params) {
+		return ${modelNameLowerCamel}Mapper.select${modelNameUpperCamel}ByCondition(params);
+	}
 }

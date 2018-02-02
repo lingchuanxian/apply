@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
@@ -81,6 +82,17 @@ public class DictionaryTypeController extends BaseController{
    		return ResultGenerator.genSuccessResult(list);
    	}
     
+    @RequiresPermissions("system:dictionary:type:select")
+   	@PostMapping("checkExist")
+   	@ResponseBody
+   	public Result checkExist(@RequestParam String code) {
+   		DictionaryType dt = dictionaryTypeService.selectByCode(code);
+   		if(dt != null) {
+			return ResultGenerator.genSuccessResult(1);
+		}else {
+			return ResultGenerator.genSuccessResult(0);
+		}
+   	}
     /**
      * 新增字典类别
      * @param type

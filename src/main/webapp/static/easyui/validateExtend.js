@@ -184,9 +184,9 @@ $.extend($.fn.validatebox.defaults.rules,
             },
             message : '身份证号码格式不正确'
         },
-        isExist: {
+        isLoginNameExist: {
             validator: function (value) {
-                var v = checkExist(value);
+                var v = checkLoginNameExist(value);
                 if (v == 0) {
                     return true;
                 } else {
@@ -194,17 +194,47 @@ $.extend($.fn.validatebox.defaults.rules,
                 }
             },
             message: '登录名已存在，请更换其它名称！'
+        },
+        isDictionaryTypeCodeExist: {
+            validator: function (value) {
+                var v = checkDictionaryTypeCodeExist(value);
+                if (v == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            message: '类别编码已存在，请更换其它编码！'
         }
     });
 //自定义方法：存在返回1，不存在返回0
-function checkExist(valueName) {
+function checkLoginNameExist(valueName) {
     var b = 1;
     $.ajax({
-        url: "checkExist",
+        url: "admin/user/checkExist",
         type: "post",
         dataType: "json",
         async: false,//是否异步执行
         data:{name:valueName},
+        success: function (data) {
+            b = data.data;
+        },
+        error: function (errorMSG) {
+            b = false;
+        }
+    });
+    console.log(b);
+    return b;
+}
+
+function checkDictionaryTypeCodeExist(valueName) {
+    var b = 1;
+    $.ajax({
+        url: "admin/dictionaryType/checkExist",
+        type: "post",
+        dataType: "json",
+        async: false,//是否异步执行
+        data:{code:valueName},
         success: function (data) {
             b = data.data;
         },

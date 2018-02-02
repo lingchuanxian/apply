@@ -18,6 +18,9 @@
 				</li>
 			</ul>
 			<div id="usermenu" style="width: 100px;">
+				<div class="modify-password" data-options="iconCls:'icon-user-mature'">
+					<a>个人信息</a>
+				</div>
 				<div class="modify-password" data-options="iconCls:'icon-key'">
 					<a>修改密码</a>
 				</div>

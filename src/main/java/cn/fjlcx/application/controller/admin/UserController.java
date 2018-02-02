@@ -16,6 +16,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -154,9 +155,9 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequiresPermissions("system:user:select")
-	@PostMapping("SelectUserById")
+	@PostMapping("SelectUserById/{id}")
 	@ResponseBody
-	public Result SelectUserById(@RequestParam int id) {
+	public Result SelectUserById(@PathVariable int id) {
 		User user = mUserService.selectUserById(id);
 		return ResultGenerator.genSuccessResult(user);
 	}
@@ -207,7 +208,7 @@ public class UserController extends BaseController{
 		SimpleHash sh = new SimpleHash(Constant.ENCRYPTION_TYPE,Constant.RESET_PWD, ByteSource.Util.bytes(initUser.getUsLoginname()),1024);
 		user.setUsPwd(sh.toString());
 		mUserService.update(user);
-		return ResultGenerator.genSuccessResult().setMessage("重置成功");
+		return ResultGenerator.genSuccessResult().setMessage("密码重置成功！新密码为123456");
 	}
 	
 	/**
