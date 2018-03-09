@@ -17,11 +17,9 @@ $(function(){
 								var self = this;
 								K.ctrl(document, 13, function() {
 									self.sync();
-									document.forms['example'].submit();
 								});
 								K.ctrl(self.edit.doc, 13, function() {
 									self.sync();
-									document.forms['example'].submit();
 								});
 							},
 							afterBlur : function() {
@@ -33,7 +31,8 @@ $(function(){
 	
 	KindEditor.ready(function(K) {
 		editor2 = K
-				.create('#editContent',
+				.create(
+						'textarea[name="artContents"]',
 						{
 							cssPath : getRootPath() + 'static/kindeditor/plugins/code/prettify.css',
 							uploadJson : getRootPath() + 'static/kindeditor/jsp/upload_json.jsp',
@@ -43,11 +42,9 @@ $(function(){
 								var self = this;
 								K.ctrl(document, 13, function() {
 									self.sync();
-									document.forms['example'].submit();
 								});
 								K.ctrl(self.edit.doc, 13, function() {
 									self.sync();
-									document.forms['example'].submit();
 								});
 							},
 							afterBlur : function() {
@@ -148,7 +145,7 @@ $(function(){
 	//###########################  新增 开始    ##############################
 	$("#add").click(function(){
 		getArticleType($('#type-combox'),1);
-		$('#artContent').val("");
+		editor1.html("");
 		$("#article-form").form("disableValidation");
 		$('#article-add-box').dialog("open");
 	});
